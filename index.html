@@ -3702,6 +3702,9 @@ document.addEventListener('DOMContentLoaded',function(){
      ══════════════════════════════════════════════════════════ */
   if(typeof gsap!=='undefined' && typeof ScrollTrigger!=='undefined'){
     gsap.registerPlugin(ScrollTrigger);
+    /* Evita refresh automático no "load": o load dispara quando a última imagem (ex.: Hero) termina,
+       podendo ser 2–3s depois; esse refresh tardio recalculava a timeline e quebrava a Hero. */
+    ScrollTrigger.config({ autoRefreshEvents: 'visibilitychange,DOMContentLoaded,resize' });
     if('scrollRestoration' in history){ history.scrollRestoration='manual'; }
 
     var heroExitTL=null;
@@ -3756,7 +3759,8 @@ document.addEventListener('DOMContentLoaded',function(){
 
       heroExitTL.progress(0);
       ScrollTrigger.refresh();
-      heroExitTL.progress(0);
+      /* Força progress(0) no próximo frame para prevalecer sobre qualquer atualização interna do refresh. */
+      requestAnimationFrame(function(){ if(heroExitTL && window.scrollY<100) heroExitTL.progress(0); });
     }
 
     function resetHeroToVisible(){
@@ -3786,12 +3790,12 @@ document.addEventListener('DOMContentLoaded',function(){
       if(ev.persisted) runHeroInit();
     });
 
+    var resizeT;
     window.addEventListener('resize',function(){
-      var t;
-      clearTimeout(t);
-      t=setTimeout(function(){
-        if(window.scrollY<10) resetHeroToVisible();
+      clearTimeout(resizeT);
+      resizeT=setTimeout(function(){
         ScrollTrigger.refresh();
+        if(window.scrollY<10) resetHeroToVisible();
       },120);
     });
 
