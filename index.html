@@ -289,7 +289,6 @@ body.menu-open .nav{
   width:100%;height:100%;object-fit:cover;
   filter:brightness(.5) saturate(1.05) sepia(.05);
   transform:scale(1.12);
-  will-change:transform;
 }
 .hero-overlay{
   position:absolute;inset:0;
@@ -1277,7 +1276,9 @@ body.menu-open .nav{
   font-weight:500;
   font-size:clamp(1.75rem,3.2vw,2.5rem);
   line-height:1.12;
-  letter-spacing:-.025em;
+  letter-spacing:.02em;
+  font-feature-settings:"kern" 1;
+  -webkit-font-smoothing:antialiased;
   color:var(--text);
   margin:0 0 18px;
   opacity:0;
@@ -1307,9 +1308,22 @@ body.menu-open .nav{
 @media(min-width:1024px){
   .benefici-list{margin-left:0;margin-right:auto}
 }
-.benefici-text-col .benefici-list{margin:0 0 32px}
+.benefici-text-col .benefici-list{margin:0 auto 32px}
+@media(max-width:1023px){
+  .benefici-text-col .benefici-list{
+    margin-left:auto;
+    margin-right:auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .benefici-text-col .benefici-list li{
+    justify-content:center;
+  }
+}
 @media(min-width:1024px){
-  .benefici-text-col .benefici-list{margin-left:0;margin-right:auto}
+  .benefici-text-col .benefici-list{margin-left:0;margin-right:auto;display:block}
+  .benefici-text-col .benefici-list li{justify-content:flex-start}
 }
 .benefici-list li{
   display:flex;
@@ -2584,13 +2598,10 @@ body.menu-open .nav{
 
 /* ══════════════════════════════════
    HERO → METODO SCROLL TRANSITION
+   will-change removido para evitar camadas excessivas e perda de fluidez
    ══════════════════════════════════ */
 
 .hero{z-index:2}
-.hero-bg,
-.hero-grain,
-.hero-orb{will-change:transform,opacity,filter}
-.hero-content{will-change:opacity,transform}
 .metodo{z-index:1}
 
 /* ══════════════════════════════════
@@ -2599,23 +2610,12 @@ body.menu-open .nav{
 
 .metodo-inner{
   position:relative;z-index:1;
-  will-change:clip-path,opacity;
 }
 .metodo-wash{
   position:absolute;inset:0;z-index:0;
   background:linear-gradient(135deg,rgba(15,95,83,.18) 0%,rgba(167,215,231,.10) 50%,transparent 100%);
   opacity:0;pointer-events:none;
   border-radius:24px;
-}
-#metodo .metodo-badge,
-#metodo h2,
-#metodo .metodo-desc,
-#metodo .metodo-location,
-#metodo .metodo-benefit,
-#metodo .metodo-ctas,
-#metodo .metodo-img-block,
-#metodo .metodo-card{
-  will-change:transform,opacity;
 }
 
 /* ══════════════════════════════════
@@ -2793,10 +2793,11 @@ body.menu-open .nav{
 
   <!-- Background -->
   <div class="hero-bg" id="heroBg">
-    <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=2400&q=80"
+    <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=75"
          alt="Trattamento di massaggio drenante professionale in ambiente elegante"
          fetchpriority="high"
-         loading="eager"/>
+         loading="eager"
+         decoding="async"/>
     <div class="hero-overlay"></div>
     <div class="hero-overlay-bottom"></div>
   </div>
@@ -3052,6 +3053,7 @@ body.menu-open .nav{
             muted
             loop
             playsinline
+            preload="metadata"
             aria-label="Video dimostrativo del massaggio drenante e drenaggio linfatico"
           ></video>
         </div>
@@ -3692,6 +3694,10 @@ document.addEventListener('DOMContentLoaded',function(){
   if(typeof gsap!=='undefined' && typeof ScrollTrigger!=='undefined'){
     gsap.registerPlugin(ScrollTrigger);
 
+    /* Evita restauração de scroll do navegador para Hero abrir sempre no estado inicial */
+    if('scrollRestoration' in history){ history.scrollRestoration='manual'; }
+    window.scrollTo(0,0);
+
     var stHeroBg=document.querySelector('.hero-bg');
     var stHeroGrain=document.querySelector('.hero-grain');
     var stHeroOrbs=gsap.utils.toArray('.hero-orb');
@@ -3758,13 +3764,42 @@ document.addEventListener('DOMContentLoaded',function(){
       },0);
     }
 
-    /* Fix: Hero deve voltar ao estado correto ao navegar de volta (anchor ou scroll) */
+    /* Estado inicial: Hero sempre em progress(0) ao montar e após refresh */
+    heroExitTL.progress(0);
+
     function resetHeroToVisible(){
       if(heroExitTL){ heroExitTL.progress(0); }
     }
     window.addEventListener('scroll',function(){
       if(window.scrollY<100){ resetHeroToVisible(); }
     },{passive:true});
+
+    /* Mobile/desktop: após load e resize, garantir Hero no topo e estado limpo */
+    function ensureHeroInitialState(){
+      if(window.scrollY<10){ resetHeroToVisible(); }
+      if(typeof ScrollTrigger!=='undefined') ScrollTrigger.refresh();
+    }
+    window.addEventListener('load',function(){
+      window.scrollTo(0,0);
+      requestAnimationFrame(function(){
+        resetHeroToVisible();
+        if(typeof ScrollTrigger!=='undefined') ScrollTrigger.refresh();
+      });
+    });
+    window.addEventListener('pageshow',function(ev){
+      if(ev.persisted){
+        window.scrollTo(0,0);
+        requestAnimationFrame(function(){
+          resetHeroToVisible();
+          if(typeof ScrollTrigger!=='undefined') ScrollTrigger.refresh();
+        });
+      }
+    });
+    window.addEventListener('resize',function(){
+      var t;
+      clearTimeout(t);
+      t=setTimeout(ensureHeroInitialState,120);
+    });
     document.querySelectorAll('a[href="#hero"]').forEach(function(link){
       link.addEventListener('click',function(e){
         e.preventDefault();
