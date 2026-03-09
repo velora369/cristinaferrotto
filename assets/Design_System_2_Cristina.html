@@ -1,0 +1,1300 @@
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cristina Ferrotto — Design System v2</title>
+
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+<style>
+  html, body {
+    overflow: auto !important;
+    overflow-x: hidden !important;
+    height: auto !important;
+    min-height: 100% !important;
+    scroll-behavior: smooth !important;
+  }
+  body { font-family: 'Montserrat', sans-serif; }
+
+  @keyframes animationIn {
+    0% { opacity: 0; transform: translateY(30px); filter: blur(8px); }
+    100% { opacity: 1; transform: translateY(0); filter: blur(0px); }
+  }
+  .animate-on-scroll { animation-play-state: paused !important; }
+  .animate-on-scroll.animate { animation-play-state: running !important; }
+
+  .text-transparent-stroke {
+    -webkit-text-stroke: 1.5px rgba(46,46,46,0.25);
+    color: transparent;
+  }
+  .text-transparent-stroke-white {
+    -webkit-text-stroke: 1.5px rgba(255,255,255,0.35);
+    color: transparent;
+  }
+  .text-transparent-stroke-thick {
+    -webkit-text-stroke: 2px rgba(46,46,46,0.18);
+    color: transparent;
+  }
+
+  .word-wrapper {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 2px;
+    margin-right: 0.25em;
+  }
+  .word-inner {
+    display: inline-block;
+    transform: translateY(110%);
+  }
+
+  @keyframes scroll-loop {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-scroll-infinite {
+    animation: scroll-loop 35s linear infinite;
+  }
+  .animate-scroll-infinite:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes shimmer {
+    from { transform: translateX(-100%) skewX(-15deg); }
+    to { transform: translateX(200%) skewX(-15deg); }
+  }
+
+  @keyframes float-orb-1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -20px) scale(1.05); }
+    66% { transform: translate(-15px, 15px) scale(0.95); }
+  }
+  @keyframes float-orb-2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-25px, 15px) scale(0.97); }
+    66% { transform: translate(20px, -30px) scale(1.03); }
+  }
+  @keyframes float-orb-3 {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(15px, -25px); }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(167,215,231,0.2), 0 0 60px rgba(167,215,231,0.1); }
+    50% { box-shadow: 0 0 30px rgba(167,215,231,0.4), 0 0 80px rgba(167,215,231,0.2); }
+  }
+
+  @keyframes spin-slow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  .flashlight-card { position: relative; }
+  .flashlight-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(167,215,231,0.08), transparent 40%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+    z-index: 2;
+    border-radius: inherit;
+  }
+  .flashlight-card:hover::before { opacity: 1; }
+
+  @keyframes clip-reveal {
+    0% { clip-path: inset(100% 0 0 0); }
+    100% { clip-path: inset(0 0 0 0); }
+  }
+
+  @keyframes fade-up {
+    0% { opacity: 0; transform: translateY(100%); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .ds-section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid #EAEAEA;
+    background: rgba(255,255,255,0.40);
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: rgba(46,46,46,0.80);
+    box-shadow: 0 1px 2px rgba(46,46,46,0.05);
+    backdrop-filter: blur(8px);
+  }
+
+  .ds-swatch-sm {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    border: 1px solid #EAEAEA;
+    flex-shrink: 0;
+  }
+
+  .bg-dot-pattern {
+    background-image: radial-gradient(circle at 1px 1px, rgba(46,46,46,0.06) 1px, transparent 0);
+    background-size: 28px 28px;
+  }
+
+  .ds-nav-link {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: rgba(46,46,46,0.70);
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+  .ds-nav-link:hover { color: #2E2E2E; }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #0F5F53, #A7D7E7, #0F5F53);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  @keyframes card-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(0.5deg); }
+  }
+</style>
+</head>
+<body class="min-h-screen bg-[#F8F9F8] text-[#2E2E2E] antialiased">
+
+<!-- ══════════════════════════════════════════════
+     AMBIENT BACKGROUND (Animated Orbs)
+     ══════════════════════════════════════════════ -->
+<div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+  <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[32rem] h-[32rem] rounded-full bg-[#A7D7E7]/12 blur-3xl" style="animation: float-orb-1 20s ease-in-out infinite;"></div>
+  <div class="absolute bottom-[-10rem] left-[-6rem] h-[28rem] w-[28rem] rounded-full bg-[#0F5F53]/8 blur-3xl" style="animation: float-orb-2 25s ease-in-out infinite;"></div>
+  <div class="absolute top-[35%] right-[-8rem] h-[26rem] w-[26rem] rounded-full bg-[#A7D7E7]/8 blur-3xl" style="animation: float-orb-3 18s ease-in-out infinite;"></div>
+  <div class="absolute top-[60%] left-[20%] h-[20rem] w-[20rem] rounded-full bg-[#0F5F53]/5 blur-3xl" style="animation: float-orb-1 22s ease-in-out infinite; animation-delay: -8s;"></div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     NAVIGATION
+     ══════════════════════════════════════════════ -->
+<nav class="fixed inset-x-0 top-0 z-50" id="dsNav">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mt-3 rounded-2xl border border-[#EAEAEA] bg-white/70 shadow-sm shadow-[#2E2E2E]/10 backdrop-blur-xl">
+      <div class="flex items-center justify-between px-3 py-3 sm:px-4">
+        <a class="group flex items-center gap-2.5" href="#">
+          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0F5F53]/15">
+            <iconify-icon icon="solar:stars-minimalistic-bold-duotone" width="20" style="color: #2E2E2E;"></iconify-icon>
+          </div>
+          <div class="leading-none">
+            <div class="flex gap-2 items-baseline">
+              <span class="text-lg font-medium text-[#2E2E2E] tracking-tight" style="font-family: 'Playfair Display', serif;">Cristina F.</span>
+              <span class="text-xs font-medium text-[#2E2E2E]/60 tracking-wide">Design System</span>
+            </div>
+          </div>
+        </a>
+        <div class="hidden md:flex items-center gap-5 overflow-x-auto" style="scrollbar-width: none;">
+          <a class="ds-nav-link" href="#ds-hero">Hero</a>
+          <a class="ds-nav-link" href="#ds-typography">Typography</a>
+          <a class="ds-nav-link" href="#ds-colors">Colors</a>
+          <a class="ds-nav-link" href="#ds-components">Components</a>
+          <a class="ds-nav-link" href="#ds-icons">Icons</a>
+          <a class="ds-nav-link" href="#ds-motion">Animations</a>
+        </div>
+        <a class="group inline-flex items-center justify-center gap-2 rounded-full bg-[#0F5F53] px-5 py-2.5 text-sm font-medium text-[#F8F9F8] shadow-sm hover:bg-[#0A4F44] transition overflow-hidden relative" href="#">
+          <span class="relative z-10">Explore</span>
+          <iconify-icon icon="solar:arrow-right-linear" width="16" class="relative z-10 group-hover:translate-x-0.5 transition-transform"></iconify-icon>
+          <span class="absolute inset-0 overflow-hidden rounded-full pointer-events-none">
+            <span class="absolute top-0 left-0 h-full w-full -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100" style="animation: shimmer 1.5s infinite; animation-play-state: paused;"></span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════════════
+     0 · HERO — Showcase of Design System Capabilities
+     ══════════════════════════════════════════════ -->
+<section class="relative min-h-[100svh] overflow-hidden" id="ds-hero">
+  <div class="absolute inset-0">
+    <img alt="Wellness ambiance" class="w-full h-full object-cover transition-transform duration-700" id="hero-bg" src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=2400&q=80" style="filter: brightness(0.55) sepia(0.08);"/>
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0F5F53]/55 via-[#0F5F53]/25 to-[#F8F9F8]/95"></div>
+    <div class="absolute inset-0 pointer-events-none" style="background: linear-gradient(135deg, rgba(15,95,83,0.15) 0%, rgba(111,188,207,0.10) 100%);"></div>
+  </div>
+
+  <div class="absolute inset-0 bg-dot-pattern opacity-20 pointer-events-none"></div>
+
+  <div class="absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-[#A7D7E7]/20 blur-[80px] pointer-events-none" style="animation: float-orb-1 15s ease-in-out infinite;"></div>
+  <div class="absolute bottom-1/4 right-1/4 w-48 h-48 rounded-full bg-white/10 blur-[60px] pointer-events-none" style="animation: float-orb-2 18s ease-in-out infinite;"></div>
+
+  <div class="flex min-h-[100svh] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-14 relative items-end">
+    <div class="relative z-10 w-full">
+      <div class="absolute -top-20 left-0 pointer-events-none select-none overflow-hidden">
+        <span class="text-[8rem] sm:text-[12rem] lg:text-[16rem] font-bold tracking-tighter text-transparent-stroke-white opacity-30 leading-none" style="font-family: 'Playfair Display', serif;">Design</span>
+      </div>
+
+      <div class="max-w-3xl relative">
+        <div class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-medium tracking-wide text-[#F8F9F8]/90 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.1s both;">
+          <iconify-icon icon="solar:stars-minimalistic-bold-duotone" width="16"></iconify-icon>
+          Typography · Colors · Components · Animations · Icons
+        </div>
+
+        <h1 class="reveal-text mt-6 text-4xl sm:text-5xl lg:text-7xl font-medium tracking-tight text-[#F8F9F8] leading-[1.05]" style="font-family: 'Playfair Display', serif;">
+          Every Token. Every Pattern. One Source of Truth.
+        </h1>
+
+        <p class="mt-5 max-w-xl text-sm sm:text-base font-light leading-relaxed text-[#F8F9F8]/85 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.5s both;">
+          The living design system behind Cristina Ferrotto's brand. A creative fusion of calming aesthetics, purposeful motion, and timeless elegance.
+        </p>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.7s both;">
+          <a class="group inline-flex items-center justify-center gap-2 rounded-full bg-[#0F5F53] px-7 py-3.5 text-sm font-medium text-[#F8F9F8] shadow-sm shadow-[#2E2E2E]/20 hover:bg-[#0A4F44] transition relative overflow-hidden" href="#ds-typography" style="animation: glow-pulse 4s ease-in-out infinite;">
+            <span class="relative z-10">Explore the System</span>
+            <iconify-icon icon="solar:arrow-right-linear" width="18" class="relative z-10 group-hover:translate-x-1 transition-transform"></iconify-icon>
+            <span class="absolute inset-0 rounded-full overflow-hidden pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <span class="absolute inset-[-100%] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,rgba(255,255,255,0.3)_100%)]" style="animation: spin-slow 3s linear infinite;"></span>
+            </span>
+          </a>
+          <a class="inline-flex items-center justify-center gap-2 hover:bg-white/15 transition text-sm font-medium text-[#F8F9F8] bg-white/10 border-white/35 border rounded-full py-3 px-6 backdrop-blur-sm" href="#">
+            View Live Website
+            <iconify-icon icon="solar:arrow-right-up-linear" width="18"></iconify-icon>
+          </a>
+        </div>
+
+        <div class="mt-10 flex items-center gap-5 text-xs font-medium text-[#F8F9F8]/70 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.9s both;">
+          <div class="flex items-center gap-2">
+            <span class="relative flex h-2 w-2">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#F8F9F8]/50"></span>
+              <span class="relative inline-flex h-2 w-2 rounded-full bg-[#F8F9F8]/70"></span>
+            </span>
+            Emerald-dominant, calming space
+          </div>
+          <div class="hidden sm:flex items-center gap-2">
+            <span class="relative flex h-2 w-2">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#A7D7E7]/50" style="animation-delay: 0.5s;"></span>
+              <span class="relative inline-flex h-2 w-2 rounded-full bg-[#A7D7E7]/70"></span>
+            </span>
+            Living pattern library
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 animate-on-scroll" style="animation: animationIn 0.8s ease-out 1.2s both;">
+    <div class="flex gap-2 text-xs font-medium text-[#F8F9F8]/85 bg-white/10 border-white/20 border rounded-full py-2 px-4 backdrop-blur-sm items-center">
+      <iconify-icon icon="solar:mouse-minimalistic-bold-duotone" width="16"></iconify-icon>
+      Scroll to explore
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     1 · TYPOGRAPHY
+     ══════════════════════════════════════════════ -->
+<section class="relative scroll-mt-28 bg-dot-pattern" id="ds-typography">
+  <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+    <div class="ds-section-label animate-on-scroll" style="animation: animationIn 0.8s ease-out 0s both;">
+      <iconify-icon icon="solar:text-bold-duotone" width="16"></iconify-icon>
+      Section 1
+    </div>
+    <h2 class="reveal-text mt-6 text-3xl sm:text-4xl font-medium tracking-tight text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">
+      Typography
+    </h2>
+    <p class="mt-4 max-w-2xl text-sm leading-relaxed text-[#2E2E2E]/75 sm:text-base animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.2s both;">
+      Two typefaces define the voice: <strong>Playfair Display</strong> for editorial headings and <strong>Montserrat</strong> for body text. Together they communicate calm authority and modern warmth.
+    </p>
+
+    <div class="mt-8 grid gap-4 sm:grid-cols-3 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.3s both;">
+      <div class="rounded-2xl border border-[#EAEAEA] bg-white/50 p-5 backdrop-blur-sm">
+        <div class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider mb-3">Display / Heading</div>
+        <div class="text-2xl text-[#2E2E2E]" style="font-family: 'Playfair Display', serif; font-weight: 500;">Playfair Display</div>
+        <div class="mt-2 text-xs text-[#2E2E2E]/50 font-mono">400 · 500 · 600 · 700</div>
+        <div class="mt-1 text-xs text-[#2E2E2E]/40">Google Fonts CDN · Serif</div>
+      </div>
+      <div class="rounded-2xl border border-[#EAEAEA] bg-white/50 p-5 backdrop-blur-sm">
+        <div class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider mb-3">Body / UI</div>
+        <div class="text-2xl text-[#2E2E2E]" style="font-family: 'Montserrat', sans-serif; font-weight: 400;">Montserrat</div>
+        <div class="mt-2 text-xs text-[#2E2E2E]/50 font-mono">300 · 400 · 500 · 600 · 700</div>
+        <div class="mt-1 text-xs text-[#2E2E2E]/40">Google Fonts CDN · Sans-serif</div>
+      </div>
+      <div class="rounded-2xl border border-[#EAEAEA] bg-white/50 p-5 backdrop-blur-sm">
+        <div class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider mb-3">Monospace / Code</div>
+        <div class="text-2xl text-[#2E2E2E]" style="font-family: 'Geist Mono', monospace; font-weight: 400;">Geist Mono</div>
+        <div class="mt-2 text-xs text-[#2E2E2E]/50 font-mono">400 · 500</div>
+        <div class="mt-1 text-xs text-[#2E2E2E]/40">Google Fonts CDN · Monospace</div>
+      </div>
+    </div>
+
+    <div class="mt-10 rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm">
+
+      <div class="flex flex-col lg:grid lg:grid-cols-12 gap-4 items-baseline py-5 border-b border-[#2E2E2E]/08 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0s both;">
+        <div class="lg:col-span-2">
+          <span class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider">H1</span>
+        </div>
+        <div class="lg:col-span-8">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Align Body. Clarity Mind.</h1>
+        </div>
+        <div class="lg:col-span-2 text-right">
+          <div class="text-xs text-[#2E2E2E]/45 font-mono">Playfair 500<br>36/48/60px · lh: 1 · ls: -0.025em</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col lg:grid lg:grid-cols-12 gap-4 items-baseline py-5 border-b border-[#2E2E2E]/08 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.05s both;">
+        <div class="lg:col-span-2">
+          <span class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider">H2</span>
+        </div>
+        <div class="lg:col-span-8">
+          <h2 class="text-3xl sm:text-4xl font-medium tracking-tight text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">A space to breathe and renew.</h2>
+        </div>
+        <div class="lg:col-span-2 text-right">
+          <div class="text-xs text-[#2E2E2E]/45 font-mono">Playfair 500<br>30/36px · lh: 1.1</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col lg:grid lg:grid-cols-12 gap-4 items-baseline py-5 border-b border-[#2E2E2E]/08 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.1s both;">
+        <div class="lg:col-span-2">
+          <span class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider">H3</span>
+        </div>
+        <div class="lg:col-span-8">
+          <h3 class="text-2xl sm:text-3xl font-medium tracking-tight text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Sunset Hatha Flow</h3>
+        </div>
+        <div class="lg:col-span-2 text-right">
+          <div class="text-xs text-[#2E2E2E]/45 font-mono">Playfair 500<br>24/30px · lh: 1.2</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col lg:grid lg:grid-cols-12 gap-4 items-baseline py-5 border-b border-[#2E2E2E]/08 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.15s both;">
+        <div class="lg:col-span-2">
+          <span class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider">H4</span>
+        </div>
+        <div class="lg:col-span-8">
+          <h4 class="text-xl font-medium tracking-tight text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Wellness Journey</h4>
+        </div>
+        <div class="lg:col-span-2 text-right">
+          <div class="text-xs text-[#2E2E2E]/45 font-mono">Playfair 500<br>20px · lh: 1.4</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col lg:grid lg:grid-cols-12 gap-4 items-baseline py-5 border-b border-[#2E2E2E]/08 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.2s both;">
+        <div class="lg:col-span-2">
+          <span class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider">H5</span>
+        </div>
+        <div class="lg:col-span-8">
+          <h5 class="text-lg font-medium tracking-tight text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Inner Balance</h5>
+        </div>
+        <div class="lg:col-span-2 text-right">
+          <div class="text-xs text-[#2E2E2E]/45 font-mono">Playfair 500<br>18px · lh: 1.5</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col lg:grid lg:grid-cols-12 gap-4 items-baseline py-5 border-b border-[#2E2E2E]/08 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.25s both;">
+        <div class="lg:col-span-2">
+          <span class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider">H6</span>
+        </div>
+        <div class="lg:col-span-8">
+          <h6 class="text-base font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Guided Meditation</h6>
+        </div>
+        <div class="lg:col-span-2 text-right">
+          <div class="text-xs text-[#2E2E2E]/45 font-mono">Playfair 500<br>16px · lh: 1.5</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col lg:grid lg:grid-cols-12 gap-4 items-baseline py-5 border-b border-[#2E2E2E]/08 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.3s both;">
+        <div class="lg:col-span-2">
+          <span class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider">Body LG</span>
+        </div>
+        <div class="lg:col-span-8">
+          <p class="text-base sm:text-lg leading-relaxed text-[#2E2E2E]/80">In a world that never stops, Aetheria offers a pause. We combine ancient yogic traditions with modern somatic therapy.</p>
+        </div>
+        <div class="lg:col-span-2 text-right">
+          <div class="text-xs text-[#2E2E2E]/45 font-mono">Montserrat 400<br>16/18px · lh: 1.625</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col lg:grid lg:grid-cols-12 gap-4 items-baseline py-5 border-b border-[#2E2E2E]/08 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.35s both;">
+        <div class="lg:col-span-2">
+          <span class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider">Body</span>
+        </div>
+        <div class="lg:col-span-8">
+          <p class="text-sm leading-relaxed text-[#2E2E2E]/75">Dynamic flows to build strength and open the breath. Arrive 10 minutes early for grounding breathwork.</p>
+        </div>
+        <div class="lg:col-span-2 text-right">
+          <div class="text-xs text-[#2E2E2E]/45 font-mono">Montserrat 400<br>14px · lh: 1.625</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col lg:grid lg:grid-cols-12 gap-4 items-baseline py-5 border-b border-[#2E2E2E]/08 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.4s both;">
+        <div class="lg:col-span-2">
+          <span class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider">Body SM</span>
+        </div>
+        <div class="lg:col-span-8">
+          <p class="text-xs leading-relaxed text-[#2E2E2E]/70">Mats available, but feel free to bring your own. All levels welcome.</p>
+        </div>
+        <div class="lg:col-span-2 text-right">
+          <div class="text-xs text-[#2E2E2E]/45 font-mono">Montserrat 400<br>12px · lh: 1.625</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col lg:grid lg:grid-cols-12 gap-4 items-baseline py-5 border-b border-[#2E2E2E]/08 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.45s both;">
+        <div class="lg:col-span-2">
+          <span class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider">Caption / Label</span>
+        </div>
+        <div class="lg:col-span-8">
+          <span class="text-xs font-medium uppercase tracking-widest text-[#2E2E2E]/60">Section Label · Badge Text · Navigation</span>
+        </div>
+        <div class="lg:col-span-2 text-right">
+          <div class="text-xs text-[#2E2E2E]/45 font-mono">Montserrat 500<br>12px · ls: 0.1em · uppercase</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col lg:grid lg:grid-cols-12 gap-4 items-baseline py-5 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.5s both;">
+        <div class="lg:col-span-2">
+          <span class="text-xs font-medium text-[#2E2E2E]/55 uppercase tracking-wider">Display Stroke</span>
+        </div>
+        <div class="lg:col-span-8">
+          <span class="text-5xl sm:text-6xl font-bold tracking-tighter text-transparent-stroke" style="font-family: 'Playfair Display', serif;">Transparent</span>
+        </div>
+        <div class="lg:col-span-2 text-right">
+          <div class="text-xs text-[#2E2E2E]/45 font-mono">Playfair 700<br>-webkit-text-stroke: 1.5px</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     2 · COLORS & SURFACES
+     ══════════════════════════════════════════════ -->
+<section class="relative scroll-mt-28" id="ds-colors">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="absolute top-[10%] right-[-5%] w-[20rem] h-[20rem] rounded-full bg-[#A7D7E7]/6 blur-3xl" style="animation: float-orb-2 20s ease-in-out infinite;"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28 relative">
+    <div class="ds-section-label animate-on-scroll" style="animation: animationIn 0.8s ease-out 0s both;">
+      <iconify-icon icon="solar:palette-bold-duotone" width="16"></iconify-icon>
+      Section 2
+    </div>
+    <h2 class="reveal-text mt-6 text-3xl sm:text-4xl font-medium tracking-tight text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">
+      Colors & Surfaces
+    </h2>
+    <p class="mt-4 max-w-2xl text-sm leading-relaxed text-[#2E2E2E]/75 sm:text-base animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.2s both;">
+      An emerald-dominant palette with light blue accents. Bold, natural greens convey health and authority; blue supports with freshness and lightness.
+    </p>
+
+    <!-- Core Palette -->
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      <div class="rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.1s both;">
+        <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Core Palette</div>
+
+        <div class="mt-5 space-y-3">
+          <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/40 transition group">
+            <div class="ds-swatch-sm" style="background: #F8F9F8;"></div>
+            <div class="flex-1">
+              <div class="text-sm font-medium text-[#2E2E2E]">Soft White</div>
+              <div class="text-xs text-[#2E2E2E]/50">Page background · Primary surface</div>
+            </div>
+            <div class="text-right text-xs text-[#2E2E2E]/40 font-mono opacity-0 group-hover:opacity-100 transition">
+              <div>#F8F9F8</div>
+              <div>rgb(248,249,248)</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/40 transition group">
+            <div class="ds-swatch-sm" style="background: #0F5F53;"></div>
+            <div class="flex-1">
+              <div class="text-sm font-medium text-[#2E2E2E]">Emerald Green</div>
+              <div class="text-xs text-[#2E2E2E]/50">Primary brand · Buttons · CTA · Dark surfaces</div>
+            </div>
+            <div class="text-right text-xs text-[#2E2E2E]/40 font-mono opacity-0 group-hover:opacity-100 transition">
+              <div>#0F5F53</div>
+              <div>rgb(15,95,83)</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/40 transition group">
+            <div class="ds-swatch-sm" style="background: #0A4F44;"></div>
+            <div class="flex-1">
+              <div class="text-sm font-medium text-[#2E2E2E]">Emerald Dark</div>
+              <div class="text-xs text-[#2E2E2E]/50">Button hover state</div>
+            </div>
+            <div class="text-right text-xs text-[#2E2E2E]/40 font-mono opacity-0 group-hover:opacity-100 transition">
+              <div>#0A4F44</div>
+              <div>rgb(10,79,68)</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/40 transition group">
+            <div class="ds-swatch-sm" style="background: #A7D7E7;"></div>
+            <div class="flex-1">
+              <div class="text-sm font-medium text-[#2E2E2E]">Light Blue</div>
+              <div class="text-xs text-[#2E2E2E]/50">Secondary accent · Glow · Gradients · Overlays</div>
+            </div>
+            <div class="text-right text-xs text-[#2E2E2E]/40 font-mono opacity-0 group-hover:opacity-100 transition">
+              <div>#A7D7E7</div>
+              <div>rgb(167,215,231)</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/40 transition group">
+            <div class="ds-swatch-sm" style="background: #2E2E2E;"></div>
+            <div class="flex-1">
+              <div class="text-sm font-medium text-[#2E2E2E]">Text Dark</div>
+              <div class="text-xs text-[#2E2E2E]/50">Primary text · Headings</div>
+            </div>
+            <div class="text-right text-xs text-[#2E2E2E]/40 font-mono opacity-0 group-hover:opacity-100 transition">
+              <div>#2E2E2E</div>
+              <div>rgb(46,46,46)</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/40 transition group">
+            <div class="ds-swatch-sm" style="background: #EAEAEA;"></div>
+            <div class="flex-1">
+              <div class="text-sm font-medium text-[#2E2E2E]">Border</div>
+              <div class="text-xs text-[#2E2E2E]/50">Dividers · Borders · Subtle lines</div>
+            </div>
+            <div class="text-right text-xs text-[#2E2E2E]/40 font-mono opacity-0 group-hover:opacity-100 transition">
+              <div>#EAEAEA</div>
+              <div>rgb(234,234,234)</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/40 transition group">
+            <div class="ds-swatch-sm" style="background: #caa24c;"></div>
+            <div class="flex-1">
+              <div class="text-sm font-medium text-[#2E2E2E]">Gold</div>
+              <div class="text-xs text-[#2E2E2E]/50">Star ratings · Decorative accent</div>
+            </div>
+            <div class="text-right text-xs text-[#2E2E2E]/40 font-mono opacity-0 group-hover:opacity-100 transition">
+              <div>#CAA24C</div>
+              <div>rgb(202,162,76)</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-white/40 transition group">
+            <div class="ds-swatch-sm" style="background: #ef4444; border-radius: 9999px;"></div>
+            <div class="flex-1">
+              <div class="text-sm font-medium text-[#2E2E2E]">Signal Red</div>
+              <div class="text-xs text-[#2E2E2E]/50">Live/starting-soon indicator · Feedback</div>
+            </div>
+            <div class="text-right text-xs text-[#2E2E2E]/40 font-mono opacity-0 group-hover:opacity-100 transition">
+              <div>#EF4444</div>
+              <div>rgb(239,68,68)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text Opacity Scale -->
+      <div class="rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.2s both;">
+        <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Text Opacity Scale</div>
+        <div class="mt-5 space-y-3">
+          <div class="flex items-center gap-4 p-3 rounded-xl">
+            <div class="ds-swatch-sm" style="background: #2E2E2E;"></div>
+            <div>
+              <div class="text-sm font-medium text-[#2E2E2E]">100% — Headings</div>
+              <div class="text-xs text-[#2E2E2E]/50 font-mono">text-[#2E2E2E] · AA contrast on soft white</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 p-3 rounded-xl">
+            <div class="ds-swatch-sm" style="background: rgba(46,46,46,0.80);"></div>
+            <div>
+              <div class="text-sm font-medium text-[#2E2E2E]/80">80% — Body text</div>
+              <div class="text-xs text-[#2E2E2E]/50 font-mono">text-[#2E2E2E]/80 · AA contrast</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 p-3 rounded-xl">
+            <div class="ds-swatch-sm" style="background: rgba(46,46,46,0.65);"></div>
+            <div>
+              <div class="text-sm font-medium text-[#2E2E2E]/65">65% — Secondary</div>
+              <div class="text-xs text-[#2E2E2E]/50 font-mono">text-[#2E2E2E]/65</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 p-3 rounded-xl">
+            <div class="ds-swatch-sm" style="background: rgba(46,46,46,0.45);"></div>
+            <div>
+              <div class="text-sm font-medium text-[#2E2E2E]/45">45% — Muted / Meta</div>
+              <div class="text-xs text-[#2E2E2E]/50 font-mono">text-[#2E2E2E]/45</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 p-3 rounded-xl">
+            <div class="ds-swatch-sm" style="background: #EAEAEA;"></div>
+            <div>
+              <div class="text-sm font-medium text-[#2E2E2E]/40">Borders / Dividers</div>
+              <div class="text-xs text-[#2E2E2E]/50 font-mono">border-[#EAEAEA]</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gradients & Surfaces -->
+    <div class="mt-8 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.3s both;">
+      <div class="text-sm font-medium text-[#2E2E2E] mb-5" style="font-family: 'Playfair Display', serif;">Gradients & Surfaces</div>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div>
+          <div class="w-full h-24 rounded-2xl bg-gradient-to-b from-[#0F5F53]/45 via-[#0F5F53]/20 to-[#F8F9F8]/90 border border-[#EAEAEA]"></div>
+          <div class="mt-2 text-xs font-medium text-[#2E2E2E]/60">Hero Overlay</div>
+        </div>
+        <div>
+          <div class="w-full h-24 rounded-2xl border border-[#EAEAEA]" style="background: linear-gradient(135deg, #0F5F53 0%, #6FBCCF 100%);"></div>
+          <div class="mt-2 text-xs font-medium text-[#2E2E2E]/60">Premium Gradient (135°)</div>
+        </div>
+        <div>
+          <div class="w-full h-24 rounded-2xl bg-white/50 backdrop-blur-sm border border-[#EAEAEA]"></div>
+          <div class="mt-2 text-xs font-medium text-[#2E2E2E]/60">Card — white/50 blur</div>
+        </div>
+        <div>
+          <div class="w-full h-24 rounded-2xl bg-white/70 backdrop-blur-xl border border-[#EAEAEA]"></div>
+          <div class="mt-2 text-xs font-medium text-[#2E2E2E]/60">Nav Glass — white/70 blur-xl</div>
+        </div>
+        <div>
+          <div class="w-full h-24 rounded-2xl bg-[#0F5F53] border border-[#EAEAEA]"></div>
+          <div class="mt-2 text-xs font-medium text-[#2E2E2E]/60">Footer — #0F5F53</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     3 · UI COMPONENTS
+     ══════════════════════════════════════════════ -->
+<section class="relative scroll-mt-28 bg-dot-pattern" id="ds-components">
+  <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+    <div class="ds-section-label animate-on-scroll" style="animation: animationIn 0.8s ease-out 0s both;">
+      <iconify-icon icon="solar:layers-bold-duotone" width="16"></iconify-icon>
+      Section 3
+    </div>
+    <h2 class="reveal-text mt-6 text-3xl sm:text-4xl font-medium tracking-tight text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">
+      UI Components
+    </h2>
+    <p class="mt-4 max-w-2xl text-sm leading-relaxed text-[#2E2E2E]/75 sm:text-base animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.2s both;">
+      Every interactive element with its real classes, states, and animated interactions.
+    </p>
+
+    <!-- BUTTONS -->
+    <div class="mt-10 rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.1s both;">
+      <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Buttons</div>
+      <p class="mt-2 text-xs leading-relaxed text-[#2E2E2E]/60">All button variants use rounded-full, transition, and consistent focus ring patterns.</p>
+      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+        <div>
+          <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Primary + Glow</div>
+          <a class="group inline-flex items-center justify-center gap-2 rounded-full bg-[#0F5F53] px-6 py-3 text-sm font-medium text-[#F8F9F8] shadow-sm shadow-[#2E2E2E]/20 hover:bg-[#0A4F44] hover:shadow-lg hover:shadow-[#0F5F53]/25 transition-all duration-300 relative overflow-hidden" href="#">
+            <span class="relative z-10">Start Your Journey</span>
+            <iconify-icon icon="solar:arrow-right-linear" width="18" class="relative z-10 group-hover:translate-x-0.5 transition-transform"></iconify-icon>
+          </a>
+        </div>
+
+        <div>
+          <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Primary Compact</div>
+          <a class="inline-flex items-center justify-center hover:bg-[#0A4F44] transition text-sm font-medium text-[#F8F9F8] bg-[#0F5F53] rounded-full py-2 px-4 shadow-sm" href="#">
+            Book a Class
+          </a>
+        </div>
+
+        <div>
+          <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Ghost (on dark bg)</div>
+          <div class="flex flex-wrap gap-3 rounded-2xl bg-[#0F5F53]/80 p-4">
+            <a class="inline-flex items-center justify-center gap-2 hover:bg-white/15 transition text-sm font-medium text-[#F8F9F8] bg-white/10 border-white/35 border rounded-full py-3 px-6 backdrop-blur-sm" href="#">
+              View Schedule
+              <iconify-icon icon="solar:calendar-linear" width="18"></iconify-icon>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Outline</div>
+          <a class="inline-flex items-center gap-2 hover:bg-white/60 hover:text-[#2E2E2E] transition text-sm font-medium text-[#2E2E2E]/80 bg-white/40 border-[#EAEAEA] border rounded-full py-3 px-6 shadow-sm" href="#">
+            Discover retreats
+            <iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon>
+          </a>
+        </div>
+
+        <div>
+          <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Arrow Button (TAO style)</div>
+          <a class="group flex items-center gap-3 bg-white text-[#2E2E2E] pl-6 pr-2 py-2 rounded-full transition hover:bg-[#F8F9F8] border border-[#EAEAEA] cursor-pointer shadow-sm" href="#">
+            <span class="text-sm font-medium">Explore More</span>
+            <div class="w-8 h-8 bg-[#0F5F53] rounded-full flex items-center justify-center text-white group-hover:rotate-45 transition duration-300">
+              <iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon>
+            </div>
+          </a>
+        </div>
+
+        <div>
+          <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Border Beam (hover)</div>
+          <button class="group inline-flex overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(167,215,231,0.15)] rounded-full p-[1px] relative items-center justify-center">
+            <span class="absolute inset-[-100%] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#A7D7E7_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" style="animation: spin-slow 3s linear infinite;"></span>
+            <span class="absolute inset-0 rounded-full bg-[#0F5F53]/80 transition-opacity duration-300 group-hover:opacity-0"></span>
+            <span class="relative flex items-center gap-2 bg-[#0F5F53] text-[#F8F9F8] rounded-full py-3 px-6 text-sm font-medium">
+              <span>Request Demo</span>
+              <iconify-icon icon="solar:arrow-right-linear" width="16" class="group-hover:translate-x-0.5 transition-transform"></iconify-icon>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INPUTS -->
+    <div class="mt-8 rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.2s both;">
+      <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Inputs</div>
+      <div class="mt-6 grid gap-6 lg:grid-cols-2">
+        <div>
+          <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Text Input (Light)</div>
+          <input class="w-full bg-white/60 border border-[#EAEAEA] rounded-xl py-3 px-4 text-sm text-[#2E2E2E] placeholder:text-[#2E2E2E]/40 focus:outline-none focus:ring-2 focus:ring-[#0F5F53]/40 focus:border-[#0F5F53]/50 transition backdrop-blur-sm" placeholder="Enter your email" type="email"/>
+        </div>
+        <div>
+          <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Email Input (Dark)</div>
+          <div class="rounded-2xl bg-[#0F5F53] p-5">
+            <div class="flex items-center gap-3">
+              <input class="flex-1 bg-transparent py-2 text-sm text-[#F8F9F8] placeholder:text-[#F8F9F8]/55 focus:outline-none" placeholder="Email Address" style="border-bottom: 1px solid rgba(248,249,248,0.35);" type="email"/>
+              <button class="inline-flex items-center gap-2 rounded-full bg-[#A7D7E7] px-4 py-2 text-sm font-medium text-[#0F5F53] hover:bg-[#93ccd9] transition">
+                Subscribe
+                <iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARDS -->
+    <div class="mt-8 rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.3s both;">
+      <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Cards</div>
+      <p class="mt-2 text-xs leading-relaxed text-[#2E2E2E]/60">Cards use rounded-3xl, subtle borders, translucent backgrounds, and animated interactions.</p>
+      <div class="mt-6 grid gap-6 lg:grid-cols-3">
+
+        <div class="flashlight-card group rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 shadow-sm shadow-[#2E2E2E]/5 transition-all duration-500 hover:shadow-md hover:shadow-[#2E2E2E]/10 hover:bg-white/70 cursor-default overflow-hidden" onmousemove="const r=this.getBoundingClientRect();this.style.setProperty('--mouse-x',`${event.clientX-r.left}px`);this.style.setProperty('--mouse-y',`${event.clientY-r.top}px`);">
+          <div class="flex items-center justify-between gap-4 relative z-10">
+            <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Movement</div>
+            <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#0F5F53]/20 text-[#2E2E2E]">
+              <iconify-icon icon="solar:heart-pulse-linear" width="18"></iconify-icon>
+            </div>
+          </div>
+          <p class="mt-5 text-sm leading-relaxed text-[#2E2E2E]/75 relative z-10">Dynamic flows to build strength with flashlight hover effect.</p>
+          <div class="mt-5 flex items-center justify-between text-xs text-[#2E2E2E]/65 relative z-10">
+            <span>Vinyasa</span>
+            <span class="flex items-center gap-1.5">45 min <iconify-icon icon="solar:clock-circle-linear" width="14"></iconify-icon></span>
+          </div>
+        </div>
+
+        <div class="group relative rounded-3xl border border-[#EAEAEA] bg-white/60 p-6 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm transition-all duration-500 ease-out hover:scale-[1.05] hover:bg-white hover:shadow-2xl hover:shadow-[#2E2E2E]/10 hover:border-[#2E2E2E]/20 hover:z-10 cursor-default">
+          <div class="flex items-center gap-3">
+            <div class="h-12 w-12 overflow-hidden rounded-2xl bg-[#0F5F53]/15">
+              <div class="h-full w-full bg-gradient-to-br from-[#0F5F53]/30 to-[#A7D7E7]/30 flex items-center justify-center text-sm font-medium text-[#2E2E2E]/60">CF</div>
+            </div>
+            <div>
+              <div class="text-sm font-medium text-[#2E2E2E]">Cristina F.</div>
+              <div class="text-xs text-[#2E2E2E]/60">Wellness Expert</div>
+            </div>
+          </div>
+          <blockquote class="mt-5 text-sm leading-relaxed text-[#2E2E2E]/80 transition-colors duration-300 group-hover:text-[#2E2E2E]">
+            <span class="font-serif text-[#2E2E2E]/40 text-lg">"</span>
+            The sound healing sessions completely transformed my practice.
+            <span class="font-serif text-[#2E2E2E]/40 text-lg">"</span>
+          </blockquote>
+          <div class="mt-4 flex gap-0.5 text-[#caa24c] opacity-50 transition-opacity duration-300 group-hover:opacity-100">
+            <iconify-icon icon="solar:star-bold" width="12"></iconify-icon>
+            <iconify-icon icon="solar:star-bold" width="12"></iconify-icon>
+            <iconify-icon icon="solar:star-bold" width="12"></iconify-icon>
+            <iconify-icon icon="solar:star-bold" width="12"></iconify-icon>
+            <iconify-icon icon="solar:star-bold" width="12"></iconify-icon>
+          </div>
+        </div>
+
+        <div class="rounded-3xl bg-[#0F5F53] p-6 text-[#F8F9F8] transition-all duration-500 hover:shadow-xl cursor-default" style="animation: card-float 6s ease-in-out infinite;">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-2 h-2 bg-[#A7D7E7] rounded-full animate-pulse"></div>
+            <span class="text-xs font-medium uppercase tracking-wide text-[#F8F9F8]/70">Live Now</span>
+          </div>
+          <div class="text-3xl tracking-tighter font-light" style="font-family: 'Playfair Display', serif;">45min</div>
+          <p class="text-sm text-[#F8F9F8]/70 mt-2">Guided meditation session</p>
+          <div class="mt-6 pt-4 border-t border-white/10 flex justify-between items-center">
+            <span class="text-xs text-[#F8F9F8]/50">Next: 6:00 PM</span>
+            <iconify-icon icon="solar:arrow-right-linear" width="16" class="text-[#A7D7E7]"></iconify-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BADGES -->
+    <div class="mt-8 rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.4s both;">
+      <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Badges & Pills</div>
+      <div class="mt-6 flex flex-wrap gap-4 items-center">
+        <div class="inline-flex items-center gap-2 rounded-full border border-[#EAEAEA] bg-white/40 px-4 py-2 text-xs font-medium tracking-wide text-[#2E2E2E]/80 shadow-sm">
+          <iconify-icon icon="solar:wind-linear" width="16"></iconify-icon>
+          Section Badge
+        </div>
+        <div class="inline-flex items-center gap-2 rounded-full border border-white/25 bg-[#0F5F53]/70 px-4 py-2 text-xs font-medium tracking-wide text-[#F8F9F8]/90 backdrop-blur-sm">
+          <iconify-icon icon="solar:leaf-linear" width="16"></iconify-icon>
+          Dark Badge
+        </div>
+        <div class="inline-flex items-center gap-2 rounded-full border border-[#EAEAEA] bg-[#F8F9F8]/70 px-3 py-1.5 text-xs font-medium text-[#2E2E2E]/80">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500/60"></span>
+            <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500"></span>
+          </span>
+          Starting Soon
+        </div>
+        <span class="px-4 py-2 rounded-full border border-[#EAEAEA] text-xs font-medium text-[#2E2E2E]/70 hover:bg-[#0F5F53]/10 hover:text-[#2E2E2E] transition cursor-pointer">Yoga</span>
+        <span class="px-4 py-2 rounded-full border border-[#EAEAEA] text-xs font-medium text-[#2E2E2E]/70 hover:bg-[#0F5F53]/10 hover:text-[#2E2E2E] transition cursor-pointer">Meditation</span>
+      </div>
+    </div>
+
+    <!-- NAVBAR & MODAL PREVIEW -->
+    <div class="mt-8 grid gap-6 lg:grid-cols-2">
+      <div class="rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.5s both;">
+        <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Navbar</div>
+        <div class="mt-4 rounded-2xl border border-[#EAEAEA] bg-white/70 shadow-sm backdrop-blur-xl p-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg bg-[#0F5F53]/15 flex items-center justify-center">
+                <iconify-icon icon="solar:stars-minimalistic-bold-duotone" width="14" style="color: #2E2E2E;"></iconify-icon>
+              </div>
+              <span class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Brand</span>
+            </div>
+            <div class="flex items-center gap-3 text-xs text-[#2E2E2E]/60">
+              <span class="hover:text-[#2E2E2E] transition cursor-pointer">Home</span>
+              <span class="hover:text-[#2E2E2E] transition cursor-pointer">About</span>
+              <span class="hover:text-[#2E2E2E] transition cursor-pointer">Contact</span>
+            </div>
+            <div class="rounded-full bg-[#0F5F53] px-3 py-1 text-xs font-medium text-white">CTA</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.6s both;">
+        <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Modal / Tooltip</div>
+        <div class="mt-4 rounded-2xl border border-[#EAEAEA] bg-white/80 shadow-xl shadow-[#2E2E2E]/10 p-5 backdrop-blur-xl max-w-xs mx-auto">
+          <div class="flex justify-between items-center mb-3">
+            <span class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Booking Confirmed</span>
+            <div class="w-6 h-6 rounded-full bg-[#F8F9F8] flex items-center justify-center cursor-pointer hover:bg-[#2E2E2E]/10 transition">
+              <iconify-icon icon="solar:close-circle-linear" width="14" style="color: rgba(46,46,46,0.6);"></iconify-icon>
+            </div>
+          </div>
+          <p class="text-xs text-[#2E2E2E]/65 leading-relaxed">Your spot in the Sunset Hatha Flow class has been reserved.</p>
+          <button class="mt-4 w-full rounded-full bg-[#0F5F53] py-2 text-xs font-medium text-white hover:bg-[#0A4F44] transition">Got it</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOCIAL ICONS -->
+    <div class="mt-8 rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.7s both;">
+      <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Social Icon Buttons</div>
+      <div class="mt-6 flex items-center gap-3 rounded-2xl bg-[#0F5F53] p-5">
+        <a class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[#F8F9F8]/90 hover:bg-white/15 hover:scale-110 transition-all duration-300" href="#">
+          <iconify-icon icon="simple-icons:instagram" width="18"></iconify-icon>
+        </a>
+        <a class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[#F8F9F8]/90 hover:bg-white/15 hover:scale-110 transition-all duration-300" href="#">
+          <iconify-icon icon="simple-icons:tiktok" width="18"></iconify-icon>
+        </a>
+        <a class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[#F8F9F8]/90 hover:bg-white/15 hover:scale-110 transition-all duration-300" href="#">
+          <iconify-icon icon="simple-icons:youtube" width="18"></iconify-icon>
+        </a>
+        <a class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[#F8F9F8]/90 hover:bg-white/15 hover:scale-110 transition-all duration-300" href="#">
+          <iconify-icon icon="simple-icons:spotify" width="18"></iconify-icon>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     4 · ICONS
+     ══════════════════════════════════════════════ -->
+<section class="relative scroll-mt-28" id="ds-icons">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="absolute bottom-[10%] left-[10%] w-[18rem] h-[18rem] rounded-full bg-[#A7D7E7]/5 blur-3xl" style="animation: float-orb-3 16s ease-in-out infinite;"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28 relative">
+    <div class="ds-section-label animate-on-scroll" style="animation: animationIn 0.8s ease-out 0s both;">
+      <iconify-icon icon="solar:shapes-bold-duotone" width="16"></iconify-icon>
+      Section 4
+    </div>
+    <h2 class="reveal-text mt-6 text-3xl sm:text-4xl font-medium tracking-tight text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">
+      Icons
+    </h2>
+    <p class="mt-4 max-w-2xl text-sm leading-relaxed text-[#2E2E2E]/75 sm:text-base animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.2s both;">
+      Hybrid icon system: Solar (Iconify) for UI elements, Lucide for inline SVGs. Both inherit currentColor and support size variants.
+    </p>
+
+    <div class="mt-10 rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.1s both;">
+      <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Icon Set (Solar + Lucide)</div>
+      <div class="mt-6 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:leaf-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">leaf</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:heart-pulse-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">heart-pulse</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:wind-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">wind</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:stars-minimalistic-bold-duotone" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">stars</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:lotus-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">lotus</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:moon-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">moon</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:clock-circle-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">clock</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:fire-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">fire</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:arrow-right-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">arrow-right</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:calendar-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">calendar</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:user-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">user</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:map-point-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">map-point</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:letter-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">letter</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:phone-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">phone</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:hamburger-menu-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">menu</div>
+        </div>
+        <div class="flex flex-col items-center gap-2 rounded-2xl border border-[#EAEAEA] bg-white/40 p-4 hover:bg-[#0F5F53]/10 transition cursor-default group">
+          <iconify-icon icon="solar:info-circle-linear" width="22" class="text-[#2E2E2E] group-hover:scale-110 transition-transform"></iconify-icon>
+          <div class="text-[10px] text-[#2E2E2E]/60">info</div>
+        </div>
+      </div>
+
+      <div class="mt-8 border-t border-[#2E2E2E]/08 pt-6">
+        <div class="text-xs font-medium text-[#2E2E2E]/55 mb-4">Size Variants</div>
+        <div class="flex flex-wrap items-end gap-6">
+          <div class="flex flex-col items-center gap-2">
+            <iconify-icon icon="solar:leaf-linear" width="14" class="text-[#2E2E2E]"></iconify-icon>
+            <div class="text-[10px] text-[#2E2E2E]/50">14px</div>
+          </div>
+          <div class="flex flex-col items-center gap-2">
+            <iconify-icon icon="solar:leaf-linear" width="18" class="text-[#2E2E2E]"></iconify-icon>
+            <div class="text-[10px] text-[#2E2E2E]/50">18px</div>
+          </div>
+          <div class="flex flex-col items-center gap-2">
+            <iconify-icon icon="solar:leaf-linear" width="22" class="text-[#0F5F53]"></iconify-icon>
+            <div class="text-[10px] text-[#2E2E2E]/50">22 Emerald</div>
+          </div>
+          <div class="flex flex-col items-center gap-2">
+            <iconify-icon icon="solar:leaf-linear" width="28" class="text-[#2E2E2E]"></iconify-icon>
+            <div class="text-[10px] text-[#2E2E2E]/50">28px</div>
+          </div>
+          <div class="flex flex-col items-center gap-2 bg-[#0F5F53] rounded-xl p-3">
+            <iconify-icon icon="solar:leaf-linear" width="28" class="text-[#F8F9F8]"></iconify-icon>
+            <div class="text-[10px] text-[#F8F9F8]/50">Inverted</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     5 · ANIMATIONS
+     ══════════════════════════════════════════════ -->
+<section class="relative scroll-mt-28 bg-dot-pattern" id="ds-motion">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div class="absolute top-[20%] right-[5%] w-[22rem] h-[22rem] rounded-full bg-[#A7D7E7]/6 blur-3xl" style="animation: float-orb-1 17s ease-in-out infinite;"></div>
+  </div>
+
+  <div class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28 relative">
+    <div class="ds-section-label animate-on-scroll" style="animation: animationIn 0.8s ease-out 0s both;">
+      <iconify-icon icon="solar:magic-stick-3-bold-duotone" width="16"></iconify-icon>
+      Section 5
+    </div>
+    <h2 class="reveal-text mt-6 text-3xl sm:text-4xl font-medium tracking-tight text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">
+      Animations & Motion
+    </h2>
+    <p class="mt-4 max-w-2xl text-sm leading-relaxed text-[#2E2E2E]/75 sm:text-base animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.2s both;">
+      Motion is gentle and purposeful — slow ease-out curves, entrance animations, and branded interactions that elevate the experience.
+    </p>
+
+    <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+      <div class="rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.1s both;">
+        <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Scroll Entrance — Fade+Slide+Blur</div>
+        <div class="rounded-2xl border border-[#EAEAEA] bg-white/60 p-5">
+          <div class="text-sm font-medium text-[#2E2E2E]">I appeared with animation</div>
+          <div class="mt-1 text-xs text-[#2E2E2E]/60 font-mono">animationIn 0.8s ease-out · translateY(30px) · blur(8px)</div>
+        </div>
+      </div>
+
+      <div class="rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.15s both;">
+        <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">GSAP Text Reveal — Word by Word</div>
+        <div class="rounded-2xl border border-[#EAEAEA] bg-white/60 p-5 overflow-hidden">
+          <h3 class="reveal-text text-xl font-medium tracking-tight text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Calm authority and warmth.</h3>
+          <div class="mt-2 text-xs text-[#2E2E2E]/60 font-mono">GSAP · power4.out · stagger 0.05s · 1.2s</div>
+        </div>
+      </div>
+
+      <div class="rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 shadow-sm shadow-[#2E2E2E]/5 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.2s both;">
+        <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Card Hover — Scale + Shadow</div>
+        <div class="group rounded-2xl border border-[#EAEAEA] bg-white/60 p-5 shadow-sm transition-all duration-500 ease-out hover:scale-[1.06] hover:bg-white hover:shadow-2xl hover:shadow-[#2E2E2E]/10 hover:border-[#2E2E2E]/20 cursor-default">
+          <div class="text-sm font-medium text-[#2E2E2E]">Hover me</div>
+          <div class="mt-1 text-xs text-[#2E2E2E]/60">duration-500 · ease-out · scale-[1.06]</div>
+          <div class="mt-3 opacity-60 transition-all duration-300 group-hover:opacity-100 text-xs text-[#2E2E2E]/80">Opacity 60% → 100%</div>
+        </div>
+      </div>
+
+      <div class="rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 shadow-sm shadow-[#2E2E2E]/5 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.25s both;">
+        <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Arrow Rotation on Hover</div>
+        <a class="group flex items-center gap-3 bg-white text-[#2E2E2E] pl-6 pr-2 py-2 rounded-full border border-[#EAEAEA] cursor-pointer shadow-sm hover:bg-[#F8F9F8] transition" href="#">
+          <span class="text-sm font-medium">Hover to rotate</span>
+          <div class="w-8 h-8 bg-[#0F5F53] rounded-full flex items-center justify-center text-white group-hover:rotate-45 transition duration-300">
+            <iconify-icon icon="solar:arrow-right-linear" width="18"></iconify-icon>
+          </div>
+        </a>
+        <div class="mt-3 text-xs text-[#2E2E2E]/60 font-mono">group-hover:rotate-45 · duration-300</div>
+      </div>
+
+      <div class="rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 shadow-sm shadow-[#2E2E2E]/5 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.3s both;">
+        <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Ping — Live Indicator</div>
+        <div class="flex items-center gap-3 mt-4">
+          <span class="relative flex h-3 w-3">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500/60"></span>
+            <span class="relative inline-flex h-3 w-3 rounded-full bg-red-500"></span>
+          </span>
+          <div class="text-sm font-medium text-[#2E2E2E]">Starting Soon</div>
+        </div>
+        <div class="flex items-center gap-3 mt-3">
+          <span class="relative flex h-3 w-3">
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#0F5F53]/60"></span>
+            <span class="relative inline-flex h-3 w-3 rounded-full bg-[#0F5F53]"></span>
+          </span>
+          <div class="text-sm font-medium text-[#2E2E2E]">Online</div>
+        </div>
+        <div class="mt-3 text-xs text-[#2E2E2E]/60 font-mono">animate-ping · bg-red-500/60</div>
+      </div>
+
+      <div class="rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 shadow-sm shadow-[#2E2E2E]/5 animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.35s both;">
+        <div class="text-xs font-medium text-[#2E2E2E]/55 mb-3">Glow Pulse — CTA Emphasis</div>
+        <div class="flex items-center justify-center py-4">
+          <div class="rounded-full bg-[#0F5F53] px-6 py-3 text-sm font-medium text-white" style="animation: glow-pulse 3s ease-in-out infinite;">
+            Breathing glow
+          </div>
+        </div>
+        <div class="mt-2 text-xs text-[#2E2E2E]/60 font-mono">glow-pulse · 3s · box-shadow animate</div>
+      </div>
+    </div>
+
+    <!-- Infinite Marquee -->
+    <div class="mt-8 rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.4s both;">
+      <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Infinite Scroll Marquee</div>
+      <p class="mt-2 text-xs text-[#2E2E2E]/60">scroll-loop 35s linear infinite · pause on hover · alpha-mask edges</p>
+      <div class="mt-6 w-full overflow-hidden rounded-2xl border border-[#EAEAEA] bg-white/40 py-8 relative" style="-webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent); mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);">
+        <div class="flex w-max animate-scroll-infinite items-center">
+          <div class="flex items-center gap-16 px-8 text-[#2E2E2E]/30 hover:text-[#2E2E2E]/70 transition-all duration-500">
+            <iconify-icon icon="solar:leaf-linear" width="40"></iconify-icon>
+            <iconify-icon icon="solar:lotus-linear" width="40"></iconify-icon>
+            <iconify-icon icon="solar:heart-pulse-linear" width="40"></iconify-icon>
+            <iconify-icon icon="solar:stars-minimalistic-bold-duotone" width="40"></iconify-icon>
+            <iconify-icon icon="solar:wind-linear" width="40"></iconify-icon>
+            <iconify-icon icon="solar:moon-linear" width="40"></iconify-icon>
+            <iconify-icon icon="solar:fire-linear" width="40"></iconify-icon>
+            <iconify-icon icon="solar:medal-star-linear" width="40"></iconify-icon>
+          </div>
+          <div class="flex items-center gap-16 px-8 text-[#2E2E2E]/30 hover:text-[#2E2E2E]/70 transition-all duration-500">
+            <iconify-icon icon="solar:leaf-linear" width="40"></iconify-icon>
+            <iconify-icon icon="solar:lotus-linear" width="40"></iconify-icon>
+            <iconify-icon icon="solar:heart-pulse-linear" width="40"></iconify-icon>
+            <iconify-icon icon="solar:stars-minimalistic-bold-duotone" width="40"></iconify-icon>
+            <iconify-icon icon="solar:wind-linear" width="40"></iconify-icon>
+            <iconify-icon icon="solar:moon-linear" width="40"></iconify-icon>
+            <iconify-icon icon="solar:fire-linear" width="40"></iconify-icon>
+            <iconify-icon icon="solar:medal-star-linear" width="40"></iconify-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Motion Timing Table -->
+    <div class="mt-8 rounded-3xl border border-[#EAEAEA] bg-white/50 p-6 sm:p-8 shadow-sm shadow-[#2E2E2E]/5 backdrop-blur-sm animate-on-scroll" style="animation: animationIn 0.8s ease-out 0.5s both;">
+      <div class="text-sm font-medium text-[#2E2E2E]" style="font-family: 'Playfair Display', serif;">Motion Timing Reference</div>
+      <div class="mt-5 grid gap-3 text-xs">
+        <div class="flex gap-4 items-center py-2 border-b border-[#2E2E2E]/06">
+          <div class="w-36 font-medium text-[#2E2E2E]/55">Entrance (scroll)</div>
+          <div class="flex-1 text-[#2E2E2E]/75">0.8s ease-out · fade + slide(30px) + blur(8px)</div>
+          <div class="text-right font-medium text-[#2E2E2E]/45 font-mono">hero, sections</div>
+        </div>
+        <div class="flex gap-4 items-center py-2 border-b border-[#2E2E2E]/06">
+          <div class="w-36 font-medium text-[#2E2E2E]/55">Text Reveal</div>
+          <div class="flex-1 text-[#2E2E2E]/75">1.2s power4.out · word-by-word · stagger 0.05s</div>
+          <div class="text-right font-medium text-[#2E2E2E]/45 font-mono">headings</div>
+        </div>
+        <div class="flex gap-4 items-center py-2 border-b border-[#2E2E2E]/06">
+          <div class="w-36 font-medium text-[#2E2E2E]/55">Default hover</div>
+          <div class="flex-1 text-[#2E2E2E]/75">150ms ease · color, bg, opacity</div>
+          <div class="text-right font-medium text-[#2E2E2E]/45 font-mono">buttons, links</div>
+        </div>
+        <div class="flex gap-4 items-center py-2 border-b border-[#2E2E2E]/06">
+          <div class="w-36 font-medium text-[#2E2E2E]/55">duration-300</div>
+          <div class="flex-1 text-[#2E2E2E]/75">300ms · opacity, rotation, color</div>
+          <div class="text-right font-medium text-[#2E2E2E]/45 font-mono">stars, arrows, icons</div>
+        </div>
+        <div class="flex gap-4 items-center py-2 border-b border-[#2E2E2E]/06">
+          <div class="w-36 font-medium text-[#2E2E2E]/55">duration-500</div>
+          <div class="flex-1 text-[#2E2E2E]/75">500ms ease-out · scale, shadow, flashlight</div>
+          <div class="text-right font-medium text-[#2E2E2E]/45 font-mono">cards, testimonials</div>
+        </div>
+        <div class="flex gap-4 items-center py-2">
+          <div class="w-36 font-medium text-[#2E2E2E]/55">Ambient</div>
+          <div class="flex-1 text-[#2E2E2E]/75">15-25s ease-in-out infinite · translate, scale</div>
+          <div class="text-right font-medium text-[#2E2E2E]/45 font-mono">bg orbs, float</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════
+     FOOTER
+     ══════════════════════════════════════════════ -->
+<footer class="text-[#F8F9F8] bg-[#0F5F53] relative overflow-hidden">
+  <div class="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-[#A7D7E7]/10 blur-3xl pointer-events-none" style="animation: float-orb-2 20s ease-in-out infinite;"></div>
+
+  <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 relative">
+    <div class="absolute top-4 right-4 pointer-events-none select-none overflow-hidden opacity-10">
+      <span class="text-[6rem] sm:text-[8rem] font-bold tracking-tighter text-transparent-stroke-white leading-none" style="font-family: 'Playfair Display', serif;">System</span>
+    </div>
+
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between relative z-10">
+      <div class="flex items-center gap-2.5">
+        <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10">
+          <iconify-icon icon="solar:stars-minimalistic-bold-duotone" width="20" style="color: #F8F9F8;"></iconify-icon>
+        </div>
+        <div>
+          <div class="text-lg font-medium tracking-tight" style="font-family: 'Playfair Display', serif;">Cristina Ferrotto</div>
+          <div class="text-xs font-medium tracking-wide text-[#F8F9F8]/60">Design System v2.0</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-5 text-xs text-[#F8F9F8]/60">
+        <span>Emerald + Light Blue Palette</span>
+        <span class="flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#A7D7E7] animate-pulse"></span>
+          Active
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ══════════════════════════════════════════════
+     SCRIPTS
+     ══════════════════════════════════════════════ -->
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+function splitTextForReveal(element) {
+  const text = element.textContent.trim();
+  const words = text.split(' ');
+  element.textContent = '';
+  words.forEach(word => {
+    const wrapper = document.createElement('span');
+    wrapper.classList.add('word-wrapper');
+    const inner = document.createElement('span');
+    inner.classList.add('word-inner');
+    inner.textContent = word + '\u00A0';
+    wrapper.appendChild(inner);
+    element.appendChild(wrapper);
+  });
+}
+
+document.querySelectorAll('.reveal-text').forEach(element => {
+  splitTextForReveal(element);
+  const innerWords = element.querySelectorAll('.word-inner');
+  gsap.to(innerWords, {
+    y: 0,
+    duration: 1.2,
+    stagger: 0.05,
+    ease: "power4.out",
+    scrollTrigger: {
+      trigger: element,
+      start: "top 85%",
+      toggleActions: "play none none reverse"
+    }
+  });
+});
+
+gsap.to("#hero-bg", {
+  yPercent: 25,
+  ease: "none",
+  scrollTrigger: {
+    trigger: "#ds-hero",
+    start: "top top",
+    end: "bottom top",
+    scrub: true
+  }
+});
+
+(function() {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("animate");
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.animate-on-scroll').forEach(el => io.observe(el));
+})();
+
+document.querySelectorAll('[href] .absolute .absolute').forEach(el => {
+  const parent = el.closest('a');
+  if (parent) {
+    parent.addEventListener('mouseenter', () => { el.style.animationPlayState = 'running'; });
+    parent.addEventListener('mouseleave', () => { el.style.animationPlayState = 'paused'; });
+  }
+});
+</script>
+
+</body></html>
