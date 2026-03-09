@@ -2643,6 +2643,14 @@ body.menu-open .nav{
 .hero{z-index:2}
 .metodo{z-index:1}
 
+/* Mobile: content-visibility para fluidez ao rolar (menos paint fora da viewport) */
+@media(max-width:767px){
+  .metodo,.trattamenti,#benefici,#testimonianze,#faq,#contatti,#chi-sono{
+    content-visibility:auto;
+    contain-intrinsic-size:auto 400px;
+  }
+}
+
 /* ══════════════════════════════════
    METODO — Scroll-driven entrance
    ══════════════════════════════════ */
@@ -3405,6 +3413,7 @@ body.menu-open .nav{
 
 <script>
 document.addEventListener('DOMContentLoaded',function(){
+  var isMobileView = function(){ return window.innerWidth < 768; };
 
   /* ══ Photo carousel (metodo card): troca a cada 3s ══ */
   var carousel=document.getElementById('metodoPhotoCarousel');
@@ -3528,12 +3537,18 @@ document.addEventListener('DOMContentLoaded',function(){
     });
   });
 
-  /* ══ Navbar scroll effect ══ */
+  /* ══ Navbar scroll effect (rAF-throttled no mobile para fluidez) ══ */
   var nav=document.getElementById('mainNav');
   var lastSY=0;
+  var navScrollScheduled=false;
   window.addEventListener('scroll',function(){
-    lastSY=window.scrollY;
-    nav.classList.toggle('nav-scrolled',lastSY>40);
+    if(navScrollScheduled) return;
+    navScrollScheduled=true;
+    requestAnimationFrame(function(){
+      navScrollScheduled=false;
+      lastSY=window.scrollY;
+      nav.classList.toggle('nav-scrolled',lastSY>40);
+    });
   },{passive:true});
 
   var heroBg=document.getElementById('heroBg');
@@ -3553,22 +3568,25 @@ document.addEventListener('DOMContentLoaded',function(){
     h1.appendChild(wrap);
   });
 
-  /* ══ GSAP stagger entrance ══ */
+  /* ══ GSAP stagger entrance (mais curto no mobile para fluidez) ══ */
   if(typeof gsap!=='undefined'){
-
+    var heroMobile=isMobileView();
     var innerWords=h1.querySelectorAll('.word-inner');
     gsap.to(innerWords,{
       y:0,opacity:1,
-      duration:1.1,stagger:.055,delay:.5,
+      duration:heroMobile?0.6:1.1,
+      stagger:heroMobile?0.03:0.055,
+      delay:heroMobile?0.2:0.5,
       ease:'power4.out'
     });
 
     var items=document.querySelectorAll('#hero .anim-entry');
     items.forEach(function(el){
-      var d=parseFloat(el.dataset.delay||0)*.14;
+      var d=parseFloat(el.dataset.delay||0)*(heroMobile?0.08:0.14);
       gsap.to(el,{
         opacity:1,y:0,filter:'blur(0px)',
-        duration:1,delay:.4+d,
+        duration:heroMobile?0.5:1,
+        delay:(heroMobile?0.2:0.4)+d,
         ease:'power3.out',
         onStart:function(){el.classList.add('visible')}
       });
@@ -3608,21 +3626,24 @@ document.addEventListener('DOMContentLoaded',function(){
   /* ══ Scroll-triggered animations for sections below Hero ══ */
   var scrollObserver=new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
-      if(entry.isIntersecting){
-        var el=entry.target;
+      if(!entry.isIntersecting) return;
+      var el=entry.target;
+      if(isMobileView()){
+        el.style.transition='opacity .35s ease-out, transform .35s ease-out, filter .35s ease-out';
+        el.style.opacity='1'; el.style.transform='none'; el.style.filter='none';
+        el.classList.add('visible');
+      }else if(typeof gsap!=='undefined'){
         var d=parseFloat(el.dataset.delay||0)*.12;
-        if(typeof gsap!=='undefined'){
-          gsap.to(el,{
-            opacity:1,y:0,filter:'blur(0px)',
-            duration:.9,delay:d,
-            ease:'power3.out',
-            onStart:function(){el.classList.add('visible')}
-          });
-        }else{
-          el.style.opacity='1';el.style.transform='none';el.style.filter='none';
-        }
-        scrollObserver.unobserve(el);
+        gsap.to(el,{
+          opacity:1,y:0,filter:'blur(0px)',
+          duration:.9,delay:d,
+          ease:'power3.out',
+          onStart:function(){el.classList.add('visible')}
+        });
+      }else{
+        el.style.opacity='1';el.style.transform='none';el.style.filter='none';
       }
+      scrollObserver.unobserve(el);
     });
   },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
 
@@ -3639,7 +3660,16 @@ document.addEventListener('DOMContentLoaded',function(){
     var trattIO = new IntersectionObserver(function(entries) {
       entries.forEach(function(entry) {
         if (!entry.isIntersecting) return;
-        if (typeof gsap !== 'undefined') {
+        if (isMobileView()) {
+          var setVisible = function(node) {
+            if (!node) return;
+            node.style.transition = 'opacity .35s ease-out, transform .35s ease-out, filter .35s ease-out';
+            node.style.opacity = '1'; node.style.transform = 'none'; node.style.filter = 'none';
+          };
+          setVisible(trattHeader);
+          trattCards.forEach(setVisible);
+          setVisible(trattCta);
+        } else if (typeof gsap !== 'undefined') {
           if (trattHeader) {
             gsap.to(trattHeader, {
               opacity: 1, y: 0, filter: 'blur(0px)',
@@ -3836,9 +3866,7 @@ document.addEventListener('DOMContentLoaded',function(){
       clearTimeout(resizeT);
       resizeT=setTimeout(function(){
         var wasDesktop=heroDesktop.matches;
-        ScrollTrigger.refresh();
-        if(wasDesktop && window.scrollY<10) resetHeroToVisible();
-        /* Ao redimensionar: mobile→desktop cria timeline; desktop→mobile mata e restaura estado. */
+        if(wasDesktop){ ScrollTrigger.refresh(); if(window.scrollY<10) resetHeroToVisible(); }
         if(!heroDesktop.matches && heroExitTL){ heroExitTL.kill(); heroExitTL=null; setHeroInitialState(); }
         else if(heroDesktop.matches && !heroExitTL) initHeroScrollTrigger();
       },120);
@@ -3856,9 +3884,10 @@ document.addEventListener('DOMContentLoaded',function(){
     });
 
     /* ══════════════════════════════════════════════════════════
-       METODO: Premium scroll-driven entrance (scrub)
-       Clip-path reveal + wash overlay + text/card stagger
+       Seções com ScrollTrigger (scrub/toggle): apenas no desktop.
+       No mobile nenhuma timeline de seção é criada → máximo de fluidez.
        ══════════════════════════════════════════════════════════ */
+    if(heroDesktop.matches){
 
     var mInner    = document.querySelector('.metodo-inner');
     var mWash     = document.querySelector('.metodo-wash');
@@ -4244,6 +4273,8 @@ document.addEventListener('DOMContentLoaded',function(){
         var inners = fallbackTitle.querySelectorAll('.word-inner');
         inners.forEach(function(w){ w.style.transform = ''; w.style.opacity = '1'; });
       }
+    }
+
     }
 
   }
