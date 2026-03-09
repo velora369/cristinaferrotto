@@ -2091,6 +2091,36 @@ body.menu-open .nav{
   width:100%;
 }
 
+/* Contatti — Desktop: duas colunas (texto | mapa) */
+@media(min-width:1024px){
+  #contatti .finale-unica-grid{
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    gap:4rem;
+    max-width:none;
+    margin:0;
+  }
+  #contatti .contatti-header{
+    flex:0 0 45%;
+    max-width:45%;
+    text-align:left;
+    margin-bottom:0;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+  }
+  #contatti .contatti-subheadline{
+    margin-left:0;
+    margin-right:0;
+  }
+  #contatti .contatti-map-card{
+    flex:0 0 55%;
+    max-width:55%;
+    margin:0;
+  }
+}
+
 /* Label seção — ds-section-label */
 .contatti-label{
   display:inline-flex;
@@ -3696,22 +3726,35 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 
   /* ══════════════════════════════════════════════════════════
-     HERO → METODO: Scroll-driven parallax transition
-     Inicialização apenas em window.load para evitar estado "scrollado"
-     no mobile (viewport/layout estável, scroll garantido em 0).
+     HERO → Desktop: scroll-driven transition completa.
+     Mobile: estado inicial fixo, sem ScrollTrigger (evita bug + melhora fluidez).
      ══════════════════════════════════════════════════════════ */
   if(typeof gsap!=='undefined' && typeof ScrollTrigger!=='undefined'){
     gsap.registerPlugin(ScrollTrigger);
-    /* Evita refresh automático no "load": o load dispara quando a última imagem (ex.: Hero) termina,
-       podendo ser 2–3s depois; esse refresh tardio recalculava a timeline e quebrava a Hero. */
     ScrollTrigger.config({ autoRefreshEvents: 'visibilitychange,DOMContentLoaded,resize' });
     if('scrollRestoration' in history){ history.scrollRestoration='manual'; }
 
     var heroExitTL=null;
+    var heroDesktop=window.matchMedia('(min-width:768px)');
+
+    function setHeroInitialState(){
+      var stHeroBg=document.querySelector('.hero-bg');
+      var stHeroGrain=document.querySelector('.hero-grain');
+      var stHeroOrbs=gsap.utils.toArray('.hero-orb');
+      var stHeroContent=document.querySelector('.hero-content');
+      var stHeroLine=document.querySelector('.hero-line');
+      if(!stHeroBg||!stHeroContent) return;
+      var supportsClip=CSS.supports && CSS.supports('clip-path','inset(0%)');
+      gsap.set(stHeroContent,{ y:0, opacity:1 });
+      gsap.set(stHeroGrain,{ opacity:0.3 });
+      stHeroOrbs.forEach(function(orb){ gsap.set(orb,{ opacity:1, scale:1, x:0, y:0 }); });
+      if(stHeroLine) gsap.set(stHeroLine,{ opacity:1, scaleX:1 });
+      if(supportsClip) gsap.set(stHeroBg,{ scale:1, opacity:1, y:0, filter:'none', clipPath:'inset(0% 0% 0% 0% round 0px)' });
+      else gsap.set(stHeroBg,{ scale:1, opacity:1, y:0, filter:'none' });
+    }
 
     function initHeroScrollTrigger(){
       if(heroExitTL){ heroExitTL.kill(); heroExitTL=null; }
-      window.scrollTo(0,0);
 
       var stHeroBg=document.querySelector('.hero-bg');
       var stHeroGrain=document.querySelector('.hero-grain');
@@ -3720,16 +3763,15 @@ document.addEventListener('DOMContentLoaded',function(){
       var stHeroLine=document.querySelector('.hero-line');
       if(!stHeroBg||!stHeroContent) return;
 
+      setHeroInitialState();
+
+      /* Só cria a timeline pesada no desktop; no mobile Hero fica estática e fluida. */
+      if(!heroDesktop.matches){
+        return;
+      }
+
       var supportsClip=CSS.supports && CSS.supports('clip-path','inset(0%)');
       var vh=window.innerHeight;
-
-      /* Estado inicial explícito: nenhuma transformação antes do ScrollTrigger existir */
-      gsap.set(stHeroContent,{ y:0, opacity:1 });
-      gsap.set(stHeroGrain,{ opacity:0.3 });
-      stHeroOrbs.forEach(function(orb){ gsap.set(orb,{ opacity:1, scale:1, x:0, y:0 }); });
-      if(stHeroLine) gsap.set(stHeroLine,{ opacity:1, scaleX:1 });
-      if(supportsClip) gsap.set(stHeroBg,{ scale:1, opacity:1, y:0, filter:'none', clipPath:'inset(0% 0% 0% 0% round 0px)' });
-      else gsap.set(stHeroBg,{ scale:1, opacity:1, y:0, filter:'none' });
 
       heroExitTL=gsap.timeline({
         scrollTrigger:{
@@ -3759,7 +3801,6 @@ document.addEventListener('DOMContentLoaded',function(){
 
       heroExitTL.progress(0);
       ScrollTrigger.refresh();
-      /* Força progress(0) no próximo frame para prevalecer sobre qualquer atualização interna do refresh. */
       requestAnimationFrame(function(){ if(heroExitTL && window.scrollY<100) heroExitTL.progress(0); });
     }
 
@@ -3794,8 +3835,12 @@ document.addEventListener('DOMContentLoaded',function(){
     window.addEventListener('resize',function(){
       clearTimeout(resizeT);
       resizeT=setTimeout(function(){
+        var wasDesktop=heroDesktop.matches;
         ScrollTrigger.refresh();
-        if(window.scrollY<10) resetHeroToVisible();
+        if(wasDesktop && window.scrollY<10) resetHeroToVisible();
+        /* Ao redimensionar: mobile→desktop cria timeline; desktop→mobile mata e restaura estado. */
+        if(!heroDesktop.matches && heroExitTL){ heroExitTL.kill(); heroExitTL=null; setHeroInitialState(); }
+        else if(heroDesktop.matches && !heroExitTL) initHeroScrollTrigger();
       },120);
     });
 
@@ -3804,8 +3849,8 @@ document.addEventListener('DOMContentLoaded',function(){
         e.preventDefault();
         window.scrollTo({top:0,behavior:'smooth'});
         setTimeout(function(){
-          ScrollTrigger.refresh();
-          resetHeroToVisible();
+          if(heroDesktop.matches){ ScrollTrigger.refresh(); resetHeroToVisible(); }
+          else setHeroInitialState();
         },350);
       });
     });
