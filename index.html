@@ -1441,6 +1441,20 @@ body.menu-open .nav{
   }
 }
 
+@media (max-width:767px){
+  .benefici,
+  .benefici-video-wrap,
+  .benefici-badge,
+  .benefici h2,
+  .benefici-text-col .benefici-desc,
+  .benefici-list li,
+  .benefici-cta{
+    opacity:1;
+    transform:none;
+    filter:none;
+  }
+}
+
 /* ══════════════════════════════════
    RECENSIONI — Testimonianze / prova sociale
    ══════════════════════════════════ */
@@ -1620,6 +1634,16 @@ body.menu-open .nav{
 }
 
 @media (prefers-reduced-motion: reduce){
+  .recensioni-header,
+  .recensioni-card,
+  .recensioni-cta{
+    opacity:1;
+    transform:translateY(0);
+    filter:blur(0);
+  }
+}
+
+@media (max-width:767px){
   .recensioni-header,
   .recensioni-card,
   .recensioni-cta{
@@ -1826,6 +1850,15 @@ body.menu-open .nav{
   }
   .faq-content-wrap{
     transition:max-height .2s ease-out;
+  }
+}
+
+@media (max-width:767px){
+  .faq-header,
+  .faq-item,
+  .faq-cta{
+    opacity:1;
+    transform:translateY(0);
   }
 }
 
@@ -2642,14 +2675,6 @@ body.menu-open .nav{
 
 .hero{z-index:2}
 .metodo{z-index:1}
-
-/* Mobile: content-visibility para fluidez ao rolar (menos paint fora da viewport) */
-@media(max-width:767px){
-  .metodo,.trattamenti,#benefici,#testimonianze,#faq,#contatti,#chi-sono{
-    content-visibility:auto;
-    contain-intrinsic-size:auto 400px;
-  }
-}
 
 /* ══════════════════════════════════
    METODO — Scroll-driven entrance
