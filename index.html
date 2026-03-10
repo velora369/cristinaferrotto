@@ -1079,6 +1079,19 @@ body.menu-open .nav{
   color:rgba(46,46,46,0.68);
 }
 
+/* Mobile: cards e header já nascem no estado final
+   (sem translate/blur/opacity zerada) para evitar qualquer “pulo”
+   ou sensação de layout desktop antes de empilhar em 1 coluna. */
+@media(max-width:767px){
+  .trattamenti-header,
+  .tratt-card,
+  .trattamenti-cta{
+    opacity:1;
+    transform:none;
+    filter:none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce){
   .tratt-card,.trattamenti-header,.trattamenti-cta{
     opacity:1;transform:translateY(0);filter:blur(0);
@@ -3783,56 +3796,58 @@ document.addEventListener('DOMContentLoaded',function(){
     var trattHeader = trattSection.querySelector('.trattamenti-header');
     var trattCards = trattSection.querySelectorAll('.tratt-card');
     var trattCta = trattSection.querySelector('.trattamenti-cta');
-    var trattIO = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (!entry.isIntersecting) return;
-        if (isMobileView()) {
-          var setVisible = function(node) {
-            if (!node) return;
-            node.style.transition = 'opacity .35s ease-out, transform .35s ease-out, filter .35s ease-out';
-            node.style.opacity = '1'; node.style.transform = 'none'; node.style.filter = 'none';
-          };
-          setVisible(trattHeader);
-          trattCards.forEach(setVisible);
-          setVisible(trattCta);
-        } else if (typeof gsap !== 'undefined') {
-          if (trattHeader) {
-            gsap.to(trattHeader, {
-              opacity: 1, y: 0, filter: 'blur(0px)',
-              duration: 0.85, ease: 'power3.out'
-            });
-          }
-          gsap.to(trattCards, {
-            opacity: 1, y: 0,
-            duration: 0.8, stagger: 0.1, delay: 0.12,
-            ease: 'power3.out'
-          });
-          if (trattCta) {
-            gsap.to(trattCta, {
+    var makeStaticVisible = function() {
+      if (trattHeader) {
+        trattHeader.style.opacity = '1';
+        trattHeader.style.transform = 'none';
+        trattHeader.style.filter = 'none';
+      }
+      trattCards.forEach(function(c) {
+        c.style.opacity = '1';
+        c.style.transform = 'none';
+        c.style.filter = 'none';
+      });
+      if (trattCta) {
+        trattCta.style.opacity = '1';
+        trattCta.style.transform = 'none';
+        trattCta.style.filter = 'none';
+      }
+    };
+
+    // Mobile: nenhum gate por scroll, tudo já visível na posição final.
+    if (isMobileView()) {
+      makeStaticVisible();
+    } else {
+      var trattIO = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          if (typeof gsap !== 'undefined') {
+            if (trattHeader) {
+              gsap.to(trattHeader, {
+                opacity: 1, y: 0, filter: 'blur(0px)',
+                duration: 0.85, ease: 'power3.out'
+              });
+            }
+            gsap.to(trattCards, {
               opacity: 1, y: 0,
-              duration: 0.75, delay: 0.5,
+              duration: 0.8, stagger: 0.1, delay: 0.12,
               ease: 'power3.out'
             });
+            if (trattCta) {
+              gsap.to(trattCta, {
+                opacity: 1, y: 0,
+                duration: 0.75, delay: 0.5,
+                ease: 'power3.out'
+              });
+            }
+          } else {
+            makeStaticVisible();
           }
-        } else {
-          if (trattHeader) {
-            trattHeader.style.opacity = '1';
-            trattHeader.style.transform = 'none';
-            trattHeader.style.filter = 'none';
-          }
-          trattCards.forEach(function(c) {
-            c.style.opacity = '1';
-            c.style.transform = 'none';
-          });
-          if (trattCta) {
-            trattCta.style.opacity = '1';
-            trattCta.style.transform = 'none';
-          }
-        }
-        trattIO.unobserve(entry.target);
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    trattIO.observe(trattSection);
+          trattIO.unobserve(entry.target);
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      trattIO.observe(trattSection);
+    }
   }
 
   /* Recensioni + Chi-sono handled by ScrollTrigger below */
