@@ -30,6 +30,12 @@ body{
   -moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
 }
+iconify-icon{
+  display:inline-block;
+  width:1em;
+  height:1em;
+  vertical-align:middle;
+}
 img{display:block;max-width:100%}
 a{text-decoration:none;color:inherit}
 button{cursor:pointer;border:none;background:none;font:inherit}
@@ -3514,6 +3520,17 @@ body.menu-open .nav{
 
 <script>
 document.addEventListener('DOMContentLoaded',function(){
+  /* ══ Iconify: garante que todos os ícones carregam imediatamente (sem lazy observer) ══ */
+  try{
+    var iconEls=document.querySelectorAll('iconify-icon');
+    iconEls.forEach(function(el){
+      if(!el.hasAttribute('noobserver')) el.setAttribute('noobserver','');
+    });
+    if(window.Iconify && typeof Iconify.scan==='function'){
+      Iconify.scan();
+    }
+  }catch(e){}
+
   var isMobileView = function(){ return window.innerWidth < 768; };
 
   /* ══ Photo carousel (metodo card): troca a cada 3s ══ */
