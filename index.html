@@ -2948,7 +2948,7 @@ body.menu-open .nav{
     </button>
   </header>
   <nav class="mobile-menu__nav" role="navigation">
-    <a href="#hero" class="mobile-menu__link" role="menuitem">Hero</a>
+    <a href="#hero" class="mobile-menu__link" role="menuitem">Home</a>
     <a href="#trattamenti" class="mobile-menu__link" role="menuitem">Trattamenti</a>
     <a href="#metodo" class="mobile-menu__link" role="menuitem">Metodo</a>
     <a href="#contatti" class="mobile-menu__link" role="menuitem">Contatti</a>
@@ -3558,6 +3558,14 @@ document.addEventListener('DOMContentLoaded',function(){
   }catch(e){}
 
   var isMobileView = function(){ return window.innerWidth < 768; };
+
+  /* No mobile, sempre volta para o topo (Hero) em refresh / pageshow */
+  if(isMobileView()){
+    window.scrollTo(0,0);
+    window.addEventListener('pageshow',function(ev){
+      if(ev.persisted) window.scrollTo(0,0);
+    });
+  }
 
   /* ══ Photo carousel (metodo card): troca a cada 3s ══ */
   var carousel=document.getElementById('metodoPhotoCarousel');
