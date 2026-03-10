@@ -938,14 +938,18 @@ body.menu-open .nav{
   transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1),filter .8s cubic-bezier(.22,1,.36,1);
 }
 
-/* Scroll reveal: curva mais curta e leve no mobile.
-   Mantém o layout 100% estável e só suaviza a entrada visual. */
+/* Scroll reveal: mobile sem deslocar layout.
+   No mobile os blocos já nascem na posição final e apenas fazem fade,
+   evitando qualquer sensação de “desktop → mobile” durante a entrada. */
 @media(max-width:767px){
   .reveal{
-    transform:translateY(14px);
-    filter:blur(2px);
+    transform:none;
+    filter:none;
   }
   .reveal.in-view{
+    opacity:1;
+    transform:none;
+    filter:none;
     transition:opacity .55s cubic-bezier(.25,1,.5,1),
                transform .55s cubic-bezier(.25,1,.5,1),
                filter .55s cubic-bezier(.25,1,.5,1);
