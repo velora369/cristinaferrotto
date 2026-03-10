@@ -615,14 +615,6 @@ body.menu-open .nav{
     gap:12px;
   }
 
-  /* Scroll reveal: curva mais curta e leve no mobile */
-  .reveal{transform:translateY(22px);filter:blur(3px)}
-  .reveal.in-view{
-    transition:opacity .55s cubic-bezier(.25,1,.5,1),
-               transform .55s cubic-bezier(.25,1,.5,1),
-               filter .55s cubic-bezier(.25,1,.5,1);
-  }
-
   /* ── PROBLEMA 2: Vídeo vertical Benefici — enquadramento no mobile ── */
   .benefici-video-wrap{
     max-width:min(100%,300px);
@@ -944,6 +936,20 @@ body.menu-open .nav{
 .reveal.in-view{
   opacity:1;transform:translateY(0);filter:blur(0);
   transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1),filter .8s cubic-bezier(.22,1,.36,1);
+}
+
+/* Scroll reveal: curva mais curta e leve no mobile.
+   Mantém o layout 100% estável e só suaviza a entrada visual. */
+@media(max-width:767px){
+  .reveal{
+    transform:translateY(14px);
+    filter:blur(2px);
+  }
+  .reveal.in-view{
+    transition:opacity .55s cubic-bezier(.25,1,.5,1),
+               transform .55s cubic-bezier(.25,1,.5,1),
+               filter .55s cubic-bezier(.25,1,.5,1);
+  }
 }
 
 /* ══════════════════════════════════
