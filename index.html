@@ -10,6 +10,24 @@
 
   gtag('config', 'AW-18054495019');
 </script>
+<!-- Event snippet for Page view conversion page
+In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+<script>
+function gtag_report_conversion(url) {
+  var callback = function () {
+    if (typeof(url) != 'undefined') {
+      window.location = url;
+    }
+  };
+  gtag('event', 'conversion', {
+      'send_to': 'AW-18054495019/mXDmCP-xjpMcEKv2hqFD',
+      'value': 1.0,
+      'currency': 'EUR',
+      'event_callback': callback
+  });
+  return false;
+}
+</script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Drenaggio Linfatico a Milano | INNOVATION D.L.M (Via della Spiga 33)</title>
@@ -2961,7 +2979,7 @@ body.menu-open .nav{
       <a href="#metodo">Metodo</a>
       <a href="#contatti">Contatti</a>
     </div>
-    <a href="https://wa.me/393208381825" target="_blank" rel="noopener" class="nav-cta desktop" aria-label="Prenota un appuntamento su WhatsApp">
+    <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="nav-cta desktop" aria-label="Prenota un appuntamento su WhatsApp">
       <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
       Prenota ora
     </a>
@@ -2986,7 +3004,7 @@ body.menu-open .nav{
     <a href="#contatti" class="mobile-menu__link" role="menuitem">Contatti</a>
   </nav>
   <div class="mobile-menu__social">
-    <a href="https://wa.me/393208381825" target="_blank" rel="noopener" class="mobile-menu__social-link" aria-label="WhatsApp">
+    <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="mobile-menu__social-link" aria-label="WhatsApp">
       <iconify-icon icon="simple-icons:whatsapp" width="22"></iconify-icon>
     </a>
     <a href="#" class="mobile-menu__social-link" aria-label="Instagram">
@@ -3035,7 +3053,7 @@ body.menu-open .nav{
       </div>
 
       <div class="hero-ctas anim-entry" data-delay="5">
-        <a href="https://wa.me/393208381825" target="_blank" rel="noopener" class="btn-primary" aria-label="Prenota un appuntamento su WhatsApp">
+        <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="btn-primary" aria-label="Prenota un appuntamento su WhatsApp">
           <span class="btn-primary__beam"><span></span></span>
           <span class="btn-primary__inner">
             <iconify-icon icon="simple-icons:whatsapp" width="18"></iconify-icon>
@@ -3125,7 +3143,7 @@ body.menu-open .nav{
         </div>
 
         <div class="metodo-ctas reveal" data-reveal-delay="5">
-          <a href="https://wa.me/393208381825" target="_blank" rel="noopener" class="metodo-btn-primary" aria-label="Prenota su WhatsApp">
+          <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="metodo-btn-primary" aria-label="Prenota su WhatsApp">
             <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
             Prenota su WhatsApp
           </a>
@@ -3232,7 +3250,7 @@ body.menu-open .nav{
     </div>
 
     <div class="trattamenti-cta">
-      <a href="https://wa.me/393208381825" target="_blank" rel="noopener" class="tratt-btn-primary" aria-label="Prenota su WhatsApp">
+      <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="tratt-btn-primary" aria-label="Prenota su WhatsApp">
         <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
         Prenota su WhatsApp
       </a>
@@ -3288,7 +3306,7 @@ body.menu-open .nav{
         <li>Aiuta a ritrovare equilibrio e comfort</li>
       </ul>
       <div class="benefici-cta reveal" data-reveal-delay="6">
-        <a href="https://wa.me/393208381825" target="_blank" rel="noopener" class="benefici-btn-primary" aria-label="Prenota su WhatsApp">
+        <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="benefici-btn-primary" aria-label="Prenota su WhatsApp">
           <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
           Prenota su WhatsApp
         </a>
@@ -3339,7 +3357,7 @@ body.menu-open .nav{
           </div>
         </div>
         <div class="chi-sono-ctas reveal" data-reveal-delay="5">
-          <a href="https://wa.me/393208381825" target="_blank" rel="noopener" class="chi-sono-btn-primary" aria-label="Prenota su WhatsApp">
+          <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="chi-sono-btn-primary" aria-label="Prenota su WhatsApp">
             <iconify-icon icon="simple-icons:whatsapp" width="18"></iconify-icon>
             Prenota su WhatsApp
           </a>
@@ -3404,7 +3422,7 @@ body.menu-open .nav{
     </div>
 
     <div class="recensioni-cta reveal" data-reveal-delay="5">
-      <a href="https://wa.me/393208381825" target="_blank" rel="noopener" class="tratt-btn-primary" aria-label="Prenota su WhatsApp">
+      <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="tratt-btn-primary" aria-label="Prenota su WhatsApp">
         <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
         Prenota su WhatsApp
       </a>
@@ -3488,7 +3506,7 @@ body.menu-open .nav{
 
     <div class="faq-cta reveal" data-reveal-delay="7">
       <p>Hai ancora domande?</p>
-      <a href="https://wa.me/393208381825" target="_blank" rel="noopener" class="tratt-btn-primary" aria-label="Prenota su WhatsApp">
+      <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="tratt-btn-primary" aria-label="Prenota su WhatsApp">
         <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
         Prenota su WhatsApp
       </a>
@@ -3507,7 +3525,7 @@ body.menu-open .nav{
         <p class="contatti-subheadline">Siamo disponibili nel centro di Milano. Clicca sulla mappa per aprire la posizione su Google Maps.</p>
         <p class="contatti-orari"><strong>Orari di ricevimento:</strong><br><span aria-hidden="true">• </span>Lunedì–venerdì: dalle 8.00 alle 17.00</p>
         <div class="contatti-cta-wrap">
-          <a href="https://wa.me/393208381825" target="_blank" rel="noopener" class="finale-unica-btn contatti-whatsapp" aria-label="Prenota su WhatsApp">
+          <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="finale-unica-btn contatti-whatsapp" aria-label="Prenota su WhatsApp">
             <iconify-icon icon="simple-icons:whatsapp" width="20"></iconify-icon>
             Prenota su WhatsApp
           </a>
@@ -3575,7 +3593,7 @@ body.menu-open .nav{
           <a href="#contatti">Contatti</a>
         </nav>
         <div class="site-footer__social" role="list">
-          <a href="https://wa.me/393208381825" target="_blank" rel="noopener" class="site-footer__social-link" aria-label="WhatsApp" role="listitem">
+          <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="site-footer__social-link" aria-label="WhatsApp" role="listitem">
             <iconify-icon icon="simple-icons:whatsapp"></iconify-icon>
           </a>
           <a href="https://instagram.com" target="_blank" rel="noopener" class="site-footer__social-link" aria-label="Instagram" role="listitem">
