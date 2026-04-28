@@ -2815,6 +2815,360 @@ body.menu-open .nav{
 /* Stati di entrata per #chi-sono gestiti via GSAP + ScrollTrigger */
 
 /* ══════════════════════════════════
+   PREZZI — Tariffe indicative
+   ══════════════════════════════════ */
+#prezzi{
+  position:relative;
+  padding:36px 20px 100px;
+  background:linear-gradient(180deg, #F8F9F8 0%, #F3F6F4 100%);
+}
+@media(min-width:768px){
+  #prezzi{padding:48px 28px 120px}
+}
+@media(min-width:1024px){
+  #prezzi{padding:56px 36px 130px}
+}
+
+.prezzi-inner{
+  max-width:980px;
+  margin:0 auto;
+}
+
+.prezzi-card{
+  position:relative;
+  border:1px solid rgba(46,46,46,.11);
+  border-radius:28px;
+  background:
+    radial-gradient(120% 100% at 100% 0%, rgba(15,95,83,.08) 0%, rgba(15,95,83,0) 45%),
+    rgba(255,255,255,.82);
+  backdrop-filter:blur(12px);
+  box-shadow:0 18px 44px rgba(46,46,46,.09);
+  padding:28px 22px 24px;
+}
+.prezzi-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:28px;
+  background:linear-gradient(180deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 55%);
+  pointer-events:none;
+}
+@media(min-width:768px){
+  .prezzi-card{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    column-gap:36px;
+    row-gap:0;
+    align-items:end;
+    padding:36px 36px 32px;
+  }
+}
+
+.prezzi-badge{
+  display:inline-flex;
+  align-items:center;
+  border-radius:9999px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.55);
+  padding:6px 14px;
+  font-size:.75rem;
+  font-weight:500;
+  letter-spacing:.06em;
+  color:rgba(46,46,46,.8);
+  margin-bottom:16px;
+  width:max-content;
+}
+
+.prezzi-title{
+  font-family:var(--serif);
+  font-weight:500;
+  font-size:1.7rem;
+  line-height:1.2;
+  letter-spacing:-.02em;
+  color:var(--text);
+  margin-bottom:14px;
+}
+@media(min-width:768px){
+  .prezzi-title{font-size:2rem}
+}
+
+.prezzi-price{
+  font-family:var(--serif);
+  font-size:2.25rem;
+  line-height:1;
+  color:var(--emerald);
+  margin-bottom:14px;
+}
+@media(min-width:768px){
+  .prezzi-price{font-size:2.65rem}
+}
+
+.prezzi-main{
+  position:relative;
+  z-index:1;
+}
+
+.prezzi-side{
+  position:relative;
+  z-index:1;
+  margin-top:18px;
+}
+@media(min-width:768px){
+  .prezzi-side{
+    margin-top:0;
+    align-self:stretch;
+    display:flex;
+    align-items:flex-end;
+    justify-content:flex-end;
+  }
+}
+
+.prezzi-side-card{
+  border:1px solid rgba(46,46,46,.1);
+  border-radius:20px;
+  background:rgba(255,255,255,.62);
+  padding:18px 16px;
+  width:100%;
+}
+@media(min-width:768px){
+  .prezzi-side-card{
+    max-width:320px;
+    padding:20px 18px;
+  }
+}
+
+.prezzi-side-label{
+  font-size:.74rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(46,46,46,.62);
+  margin-bottom:6px;
+}
+
+.prezzi-side-value{
+  font-family:var(--serif);
+  font-size:1.45rem;
+  line-height:1.2;
+  color:var(--emerald);
+  margin-bottom:8px;
+}
+
+.prezzi-side-text{
+  font-size:.82rem;
+  line-height:1.55;
+  color:rgba(46,46,46,.68);
+  margin-bottom:14px;
+}
+
+.prezzi-cta{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  width:100%;
+  min-height:46px;
+  border-radius:9999px;
+  background:var(--emerald);
+  color:var(--bg);
+  font-size:.875rem;
+  font-weight:600;
+  padding:11px 18px;
+  transition:background .25s, transform .2s, box-shadow .25s;
+}
+.prezzi-cta:hover{
+  background:var(--emerald-dark);
+  transform:translateY(-1px);
+  box-shadow:0 8px 24px rgba(15,95,83,.24);
+}
+.prezzi-cta:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:2px;
+}
+
+.prezzi-desc{
+  font-size:.95rem;
+  line-height:1.7;
+  color:rgba(46,46,46,.8);
+  margin-bottom:11px;
+}
+
+.prezzi-note{
+  font-size:.84rem;
+  line-height:1.6;
+  color:rgba(46,46,46,.65);
+}
+
+@media(max-width:767px){
+  #prezzi .prezzi-main{
+    text-align:left;
+  }
+}
+
+/* ══════════════════════════════════
+   SPAZIO — Ambiente di trattamento
+   ══════════════════════════════════ */
+#spazio{
+  position:relative;
+  padding:12px 20px 110px;
+  background:linear-gradient(180deg,#F3F6F4 0%,#F8F9F8 55%,#F7F9F8 100%);
+  overflow:hidden;
+}
+@media(min-width:768px){
+  #spazio{padding:20px 28px 130px}
+}
+@media(min-width:1024px){
+  #spazio{padding:26px 36px 140px}
+}
+
+.spazio-inner{
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.spazio-head{
+  max-width:760px;
+  margin-bottom:32px;
+}
+
+.spazio-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid var(--border);
+  border-radius:9999px;
+  padding:6px 14px;
+  font-size:.75rem;
+  letter-spacing:.06em;
+  color:rgba(46,46,46,.82);
+  background:rgba(255,255,255,.45);
+  margin-bottom:16px;
+}
+
+.spazio-title{
+  font-family:var(--serif);
+  font-weight:500;
+  font-size:1.8rem;
+  line-height:1.2;
+  letter-spacing:-.02em;
+  color:var(--text);
+  margin-bottom:14px;
+}
+@media(min-width:768px){
+  .spazio-title{font-size:2.15rem}
+}
+
+.spazio-desc{
+  font-size:.95rem;
+  line-height:1.75;
+  color:rgba(46,46,46,.78);
+  max-width:66ch;
+}
+
+/* Galleria orizzontale a scorrimento automatico — slide simmetriche, immagine sempre intera */
+.spazio-marquee-wrap{
+  position:relative;
+  width:100vw;
+  left:50%;
+  transform:translateX(-50%);
+  overflow:hidden;
+  mask-image:linear-gradient(90deg,transparent,#000 32px,#000 calc(100% - 32px),transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent);
+}
+.spazio-marquee{
+  overflow:hidden;
+  padding:8px 0 12px;
+}
+.spazio-marquee-track{
+  display:flex;
+  align-items:stretch;
+  gap:clamp(12px,3vw,18px);
+  width:max-content;
+  animation:spazio-marquee-scroll 85s linear infinite;
+}
+.spazio-marquee-track:hover{
+  animation-play-state:paused;
+}
+@keyframes spazio-marquee-scroll{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-50%)}
+}
+@media(prefers-reduced-motion:reduce){
+  .spazio-marquee-track{
+    animation:none;
+    flex-wrap:wrap;
+    justify-content:center;
+    width:100%;
+    max-width:1200px;
+    margin:0 auto;
+    transform:none!important;
+  }
+  .spazio-slide{
+    flex:1 1 clamp(140px,42%,260px);
+    max-width:320px;
+  }
+}
+
+.spazio-slide{
+  position:relative;
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:clamp(260px,78vw,340px);
+  height:clamp(220px,52vw,300px);
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.58);
+  background:
+    linear-gradient(145deg,#EEF1EF 0%,#E4EAE7 100%);
+  box-shadow:
+    0 8px 20px rgba(46,46,46,.07),
+    0 20px 44px rgba(46,46,46,.09);
+  isolation:isolate;
+}
+@media(min-width:768px){
+  .spazio-slide{
+    width:clamp(300px,28vw,380px);
+    height:clamp(240px,22vw,320px);
+  }
+}
+.spazio-slide::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(160deg, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 40%);
+  pointer-events:none;
+  z-index:1;
+}
+.spazio-slide img{
+  position:relative;
+  z-index:0;
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  display:block;
+  object-fit:contain;
+  transition:transform .5s cubic-bezier(.22,1,.36,1), filter .35s ease;
+}
+.spazio-slide:hover img{
+  transform:scale(1.02);
+  filter:saturate(1.06);
+}
+
+@media(max-width:767px){
+  #spazio .spazio-head{
+    text-align:center;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  #spazio .spazio-badge{
+    margin-left:auto;
+    margin-right:auto;
+  }
+}
+
+/* ══════════════════════════════════
    HERO → METODO SCROLL TRANSITION
    will-change removido para evitar camadas excessivas e perda de fluidez
    ══════════════════════════════════ */
@@ -2979,7 +3333,7 @@ body.menu-open .nav{
       <a href="#metodo">Metodo</a>
       <a href="#contatti">Contatti</a>
     </div>
-    <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="nav-cta desktop" aria-label="Prenota un appuntamento su WhatsApp">
+    <a href="https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A');" class="nav-cta desktop" aria-label="Prenota un appuntamento su WhatsApp">
       <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
       Prenota ora
     </a>
@@ -3004,7 +3358,7 @@ body.menu-open .nav{
     <a href="#contatti" class="mobile-menu__link" role="menuitem">Contatti</a>
   </nav>
   <div class="mobile-menu__social">
-    <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="mobile-menu__social-link" aria-label="WhatsApp">
+    <a href="https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A');" class="mobile-menu__social-link" aria-label="WhatsApp">
       <iconify-icon icon="simple-icons:whatsapp" width="22"></iconify-icon>
     </a>
     <a href="#" class="mobile-menu__social-link" aria-label="Instagram">
@@ -3053,7 +3407,7 @@ body.menu-open .nav{
       </div>
 
       <div class="hero-ctas anim-entry" data-delay="5">
-        <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="btn-primary" aria-label="Prenota un appuntamento su WhatsApp">
+        <a href="https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A');" class="btn-primary" aria-label="Prenota un appuntamento su WhatsApp">
           <span class="btn-primary__beam"><span></span></span>
           <span class="btn-primary__inner">
             <iconify-icon icon="simple-icons:whatsapp" width="18"></iconify-icon>
@@ -3143,7 +3497,7 @@ body.menu-open .nav{
         </div>
 
         <div class="metodo-ctas reveal" data-reveal-delay="5">
-          <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="metodo-btn-primary" aria-label="Prenota su WhatsApp">
+          <a href="https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A');" class="metodo-btn-primary" aria-label="Prenota su WhatsApp">
             <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
             Prenota su WhatsApp
           </a>
@@ -3250,7 +3604,7 @@ body.menu-open .nav{
     </div>
 
     <div class="trattamenti-cta">
-      <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="tratt-btn-primary" aria-label="Prenota su WhatsApp">
+      <a href="https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A');" class="tratt-btn-primary" aria-label="Prenota su WhatsApp">
         <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
         Prenota su WhatsApp
       </a>
@@ -3306,7 +3660,7 @@ body.menu-open .nav{
         <li>Aiuta a ritrovare equilibrio e comfort</li>
       </ul>
       <div class="benefici-cta reveal" data-reveal-delay="6">
-        <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="benefici-btn-primary" aria-label="Prenota su WhatsApp">
+        <a href="https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A');" class="benefici-btn-primary" aria-label="Prenota su WhatsApp">
           <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
           Prenota su WhatsApp
         </a>
@@ -3357,7 +3711,7 @@ body.menu-open .nav{
           </div>
         </div>
         <div class="chi-sono-ctas reveal" data-reveal-delay="5">
-          <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="chi-sono-btn-primary" aria-label="Prenota su WhatsApp">
+          <a href="https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A');" class="chi-sono-btn-primary" aria-label="Prenota su WhatsApp">
             <iconify-icon icon="simple-icons:whatsapp" width="18"></iconify-icon>
             Prenota su WhatsApp
           </a>
@@ -3365,6 +3719,81 @@ body.menu-open .nav{
             Scopri il metodo
             <iconify-icon icon="solar:arrow-right-linear" width="18" class="chi-sono-btn-secondary__icon"></iconify-icon>
           </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PREZZI — Tariffe indicative dei trattamenti ══ -->
+<section id="prezzi" aria-label="Prezzi dei trattamenti">
+  <div class="prezzi-inner">
+    <article class="prezzi-card reveal" data-reveal-delay="1">
+      <div class="prezzi-main">
+        <span class="prezzi-badge reveal" data-reveal-delay="2">PREZZI</span>
+        <h2 class="prezzi-title reveal" data-reveal-delay="3">Quanto costa un trattamento?</h2>
+        <p class="prezzi-price reveal" data-reveal-delay="4">A partire da 100 euro</p>
+        <p class="prezzi-desc reveal" data-reveal-delay="5">
+          I trattamenti INNOVATION D.L.M sono personalizzati in base alle esigenze del corpo e agli obiettivi della persona.
+        </p>
+        <p class="prezzi-note reveal" data-reveal-delay="6">
+          Il prezzo finale può variare in base al percorso consigliato, alla durata della seduta e al tipo di trattamento scelto.
+        </p>
+      </div>
+      <aside class="prezzi-side reveal" data-reveal-delay="7" aria-label="Prenotazione trattamenti">
+        <div class="prezzi-side-card">
+          <p class="prezzi-side-text">Scrivici su WhatsApp per ricevere una proposta personalizzata in base alle tue esigenze.</p>
+          <a href="https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A');" class="prezzi-cta" aria-label="Richiedi informazioni su WhatsApp">
+            <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
+            Richiedi informazioni
+          </a>
+        </div>
+      </aside>
+    </article>
+  </div>
+</section>
+
+<!-- ══ SPAZIO — Ambiente di trattamento ══ -->
+<section id="spazio" aria-label="Spazio di trattamento">
+  <div class="spazio-inner">
+    <header class="spazio-head">
+      <span class="spazio-badge reveal" data-reveal-delay="1">LO SPAZIO</span>
+      <h2 class="spazio-title reveal" data-reveal-delay="2">Un ambiente pensato per rallentare</h2>
+      <p class="spazio-desc reveal" data-reveal-delay="3">
+        Luce morbida, linee pulite e un'atmosfera essenziale: ogni dettaglio del nostro spazio nasce per accompagnare il corpo verso una sensazione di calma profonda, in modo naturale e contemporaneo.
+      </p>
+    </header>
+
+    <div class="spazio-marquee-wrap">
+      <div class="spazio-marquee" role="region" aria-roledescription="carousel" aria-label="Galleria fotografica dello spazio">
+        <div class="spazio-marquee-track" id="spazioMarqueeTrack">
+          <figure class="spazio-slide">
+            <img src="https://yungwizzeprod2.wordpress.com/wp-content/uploads/2026/04/1fbed3ca-3391-4cd2-8cfd-d2b6cc09edf4.webp" alt="Vista principale dello spazio di trattamento Innovation D.L.M a Milano" loading="lazy" decoding="async"/>
+          </figure>
+          <figure class="spazio-slide">
+            <img src="https://yungwizzeprod2.wordpress.com/wp-content/uploads/2026/04/205861e8-6233-4f37-b74b-2c7d8aa38d3b.webp" alt="Dettaglio dell'ambiente di trattamento con stile moderno e rilassante" loading="lazy" decoding="async"/>
+          </figure>
+          <figure class="spazio-slide">
+            <img src="https://yungwizzeprod2.wordpress.com/wp-content/uploads/2026/04/8569fefa-1d86-4dd2-925c-cb9e3ab391f9.webp" alt="Area dedicata ai trattamenti drenanti in uno spazio elegante" loading="lazy" decoding="async"/>
+          </figure>
+          <figure class="spazio-slide">
+            <img src="https://yungwizzeprod2.wordpress.com/wp-content/uploads/2026/04/67d254bf-7224-4977-9a75-b118f0a85621.webp" alt="Ambiente professionale con materiali naturali e design essenziale" loading="lazy" decoding="async"/>
+          </figure>
+          <figure class="spazio-slide">
+            <img src="https://yungwizzeprod2.wordpress.com/wp-content/uploads/2026/04/54da1408-2949-4bf2-bfe1-80bebee9d679.webp" alt="Zona di accoglienza dallo stile contemporaneo e luminoso" loading="lazy" decoding="async"/>
+          </figure>
+          <figure class="spazio-slide">
+            <img src="https://yungwizzeprod2.wordpress.com/wp-content/uploads/2026/04/32ca97a2-0ce3-4468-9580-391cacc84f61.webp" alt="Spazio dedicato al benessere con atmosfera calma e curata" loading="lazy" decoding="async"/>
+          </figure>
+          <figure class="spazio-slide">
+            <img src="https://yungwizzeprod2.wordpress.com/wp-content/uploads/2026/04/30d3cff1-725a-4c0b-889a-fca3fe4a01f2.webp" alt="Dettaglio degli interni dello studio Innovation D.L.M" loading="lazy" decoding="async"/>
+          </figure>
+          <figure class="spazio-slide">
+            <img src="https://yungwizzeprod2.wordpress.com/wp-content/uploads/2026/04/21a74a4f-6325-4e7e-9ec2-ba071ddd60de.webp" alt="Area trattamenti con un'estetica moderna e minimalista" loading="lazy" decoding="async"/>
+          </figure>
+          <figure class="spazio-slide">
+            <img src="https://yungwizzeprod2.wordpress.com/wp-content/uploads/2026/04/9c7871f9-9469-46ab-93e6-816fe40b2230.webp" alt="Vista complessiva dello spazio professionale dedicato al drenaggio linfatico" loading="lazy" decoding="async"/>
+          </figure>
         </div>
       </div>
     </div>
@@ -3422,7 +3851,7 @@ body.menu-open .nav{
     </div>
 
     <div class="recensioni-cta reveal" data-reveal-delay="5">
-      <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="tratt-btn-primary" aria-label="Prenota su WhatsApp">
+      <a href="https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A');" class="tratt-btn-primary" aria-label="Prenota su WhatsApp">
         <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
         Prenota su WhatsApp
       </a>
@@ -3506,7 +3935,7 @@ body.menu-open .nav{
 
     <div class="faq-cta reveal" data-reveal-delay="7">
       <p>Hai ancora domande?</p>
-      <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="tratt-btn-primary" aria-label="Prenota su WhatsApp">
+      <a href="https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A');" class="tratt-btn-primary" aria-label="Prenota su WhatsApp">
         <iconify-icon icon="simple-icons:whatsapp" width="16"></iconify-icon>
         Prenota su WhatsApp
       </a>
@@ -3525,7 +3954,7 @@ body.menu-open .nav{
         <p class="contatti-subheadline">Siamo disponibili nel centro di Milano. Clicca sulla mappa per aprire la posizione su Google Maps.</p>
         <p class="contatti-orari"><strong>Orari di ricevimento:</strong><br><span aria-hidden="true">• </span>Lunedì–venerdì: dalle 8.00 alle 17.00</p>
         <div class="contatti-cta-wrap">
-          <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="finale-unica-btn contatti-whatsapp" aria-label="Prenota su WhatsApp">
+          <a href="https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A');" class="finale-unica-btn contatti-whatsapp" aria-label="Prenota su WhatsApp">
             <iconify-icon icon="simple-icons:whatsapp" width="20"></iconify-icon>
             Prenota su WhatsApp
           </a>
@@ -3593,7 +4022,7 @@ body.menu-open .nav{
           <a href="#contatti">Contatti</a>
         </nav>
         <div class="site-footer__social" role="list">
-          <a href="https://wa.me/393208381825" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825');" class="site-footer__social-link" aria-label="WhatsApp" role="listitem">
+          <a href="https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A" target="_blank" rel="noopener" onclick="return gtag_report_conversion('https://wa.me/393208381825?text=Ciao%21%20Vorrei%20prenotare%20una%20sessione%20presso%20INNOVATION%20D.L.M.%20Potete%20darmi%20informazioni%20sui%20trattamenti%20e%20le%20disponibilit%C3%A0%3F%20Grazie%21%20%F0%9F%98%8A');" class="site-footer__social-link" aria-label="WhatsApp" role="listitem">
             <iconify-icon icon="simple-icons:whatsapp"></iconify-icon>
           </a>
           <a href="https://instagram.com" target="_blank" rel="noopener" class="site-footer__social-link" aria-label="Instagram" role="listitem">
@@ -3622,6 +4051,27 @@ document.addEventListener('DOMContentLoaded',function(){
   }catch(e){}
 
   var isMobileView = function(){ return window.innerWidth < 768; };
+
+  /* ══ SPAZIO — marquee infinito (clone solo se motion OK) ══ */
+  (function(){
+    var track=document.getElementById('spazioMarqueeTrack');
+    if(!track) return;
+    var mq=window.matchMedia('(prefers-reduced-motion: reduce)');
+    var applyMarquee=function(){
+      var saved=track.getAttribute('data-spazio-original');
+      if(!saved){
+        saved=track.innerHTML;
+        track.setAttribute('data-spazio-original',saved);
+      }
+      track.innerHTML=mq.matches?saved:saved+saved;
+    };
+    applyMarquee();
+    if(typeof mq.addEventListener==='function'){
+      mq.addEventListener('change',applyMarquee);
+    }else if(typeof mq.addListener==='function'){
+      mq.addListener(applyMarquee);
+    }
+  })();
 
   /* No mobile, sempre volta para o topo (Hero) em refresh / pageshow */
   if(isMobileView()){
@@ -3896,7 +4346,7 @@ document.addEventListener('DOMContentLoaded',function(){
   /* ══ Transição leve entre seções no mobile (fade + translateY sutil) ══ */
   (function(){
     if(!isMobileView()) return;
-    var sections=document.querySelectorAll('#metodo,#trattamenti,#benefici,#chi-sono,#testimonianze,#faq,#contatti');
+    var sections=document.querySelectorAll('#metodo,#trattamenti,#benefici,#chi-sono,#prezzi,#spazio,#testimonianze,#faq,#contatti');
     if(!sections.length) return;
 
     sections.forEach(function(sec){
